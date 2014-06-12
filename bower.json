@@ -25,10 +25,8 @@
   "license": "MIT",
   "homepage": "https://github.com/kentcdodds/ng-stats",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "*",
+    "!README.md",
+    "!ng-stats.js"
   ]
 }
