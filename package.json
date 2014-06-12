@@ -1,0 +1,25 @@
+{
+  "name": "ng-stats",
+  "version": "0.0.0",
+  "description": "Little utility to show stats about your page's angular digest/watches.",
+  "main": "ng-stats.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kentcdodds/ng-stats.git"
+  },
+  "keywords": [
+    "angular",
+    "ng-stats",
+    "angularjs",
+    "utilities"
+  ],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kentcdodds/ng-stats/issues"
+  },
+  "homepage": "https://github.com/kentcdodds/ng-stats"
+}

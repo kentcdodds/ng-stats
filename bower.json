@@ -1,0 +1,29 @@
+{
+  "name": "ng-stats",
+  "main": "ng-stats.js",
+  "version": "0.0.0",
+  "authors": [
+    "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)"
+  ],
+  "description": "Little utility to show stats about your page's angular digest/watches.",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "ng-stats",
+    "angularjs",
+    "utilities"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/kentcdodds/ng-stats",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
