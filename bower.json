@@ -1,9 +1,14 @@
 {
   "name": "ng-stats",
   "main": "ng-stats.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "authors": [
-    "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)"
+    "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+    "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
+  ],
+  "contributors": [
+    "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+    "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
   ],
   "description": "Little utility to show stats about your page's angular digest/watches.",
   "moduleType": [
