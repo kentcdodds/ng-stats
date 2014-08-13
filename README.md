@@ -48,4 +48,4 @@ MIT
 
 ## Thanks
 
-[Viper Bailey](https://github.com/jinxidoru) for writing the initial version (and most of what the project is today).
+[Viper Bailey](https://github.com/jinxidoru) for writing the initial version (and most of the graph stuff).
