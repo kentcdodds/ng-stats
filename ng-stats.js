@@ -73,6 +73,8 @@
     var bodyEl = angular.element(document.body);
     var lastWatchCountRun = timerNow();
     var lastWatchCount = getWatcherCount() || 0;
+    var watchCountTimeout = null;
+    var lastAverageDigest = 0;
     var $rootScope = bodyEl.injector().get('$rootScope');
 
     // add the DOM element
@@ -92,9 +94,6 @@
       textAlign: 'right'
     });
     bodyEl.append(state.$el);
-    state.$el.on('click', function() {
-      $rootScope.$digest();
-    });
     var $text = state.$el.find('div');
 
     // initialize the canvas
@@ -118,21 +117,30 @@
 
       // display the results
       var avg = (sum/times.length);
-      var color = (avg>opts.digestTimeThreshold) ? 'red' : 'green';
-      $text.text(getWatcherCount() + ' | ' + avg.toFixed(2)).css({color:color});
+      addDataToCanvas(getWatcherCount(), avg);
+    };
+
+    function addDataToCanvas(watchCount, digestAverage) {
+      var averageDigest = digestAverage || lastAverageDigest;
+      var color = (averageDigest > opts.digestTimeThreshold) ? 'red' : 'green';
+      $text.text(watchCount + ' | ' + averageDigest.toFixed(2)).css({color:color});
+
+      if (!digestAverage) {
+        return;
+      }
 
       // color the sliver if this is the first step
       var ctx = cvs.getContext('2d');
       if (noDigestSteps > 0) {
         noDigestSteps = 0;
         ctx.fillStyle = '#333';
-        ctx.fillRect(graphSz.width-1,0,1,graphSz.height);
+        ctx.fillRect(graphSz.width - 1, 0, 1, graphSz.height);
       }
 
       // mark the point on the graph
       ctx.fillStyle = color;
-      ctx.fillRect(graphSz.width-1,Math.max(0,graphSz.height-avg),2,2);
-    };
+      ctx.fillRect(graphSz.width-1,Math.max(0,graphSz.height - averageDigest),2,2);
+    }
 
     //! Shift the canvas to the left.
     function shiftLeft() {
@@ -147,10 +155,15 @@
     }
 
     function getWatcherCount() {
+      window.clearTimeout(watchCountTimeout);
       var now = timerNow();
-      if (now - lastWatchCountRun > 500) {
+      if (now - lastWatchCountRun > 300) {
         lastWatchCountRun = now;
         lastWatchCount = getWatcherCountForElement(angular.element(document.documentElement));
+      } else {
+        watchCountTimeout = window.setTimeout(function() {
+          addDataToCanvas(getWatcherCount());
+        }, 350);
       }
       return lastWatchCount;
     }
