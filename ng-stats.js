@@ -71,6 +71,9 @@
     var timesIdx = 0;
     var noDigestSteps = 0;
     var bodyEl = angular.element(document.body);
+    var lastWatchCountRun = timerNow();
+    var lastWatchCount = getWatcherCount() || 0;
+    var $rootScope = bodyEl.injector().get('$rootScope');
 
     // add the DOM element
     state.$el = angular.element('<div><canvas></canvas><div></div></div>').css({
@@ -79,8 +82,6 @@
       borderBottom: '1px solid #666',
       borderRight: '1px solid #666',
       color: 'red',
-      paddingRight: 8,
-      paddingLeft: 8,
       fontFamily: 'Courier',
       width: 130,
       zIndex: 9999,
@@ -91,6 +92,9 @@
       textAlign: 'right'
     });
     bodyEl.append(state.$el);
+    state.$el.on('click', function() {
+      $rootScope.$digest();
+    });
     var $text = state.$el.find('div');
 
     // initialize the canvas
@@ -98,13 +102,13 @@
     var cvs = state.$el.find('canvas').attr(graphSz)[0];
 
     // replace the digest
-    var $scope = bodyEl.injector().get('$rootScope');
-    var $digest = $scope.__proto__.$digest;
-    $scope.__proto__.$digest = function() {
+    var scopePrototype = Object.getPrototypeOf($rootScope);
+    var oldDigest = scopePrototype.$digest;
+    scopePrototype.$digest = function $digest() {
       var start = timerNow();
 
       // call the original digest
-      $digest.apply(this,arguments);
+      oldDigest.apply(this,arguments);
 
       // update the timing
       var diff = (timerNow()-start);
@@ -143,27 +147,36 @@
     }
 
     function getWatcherCount() {
-      var root = angular.element(document.getElementsByTagName('body'));
-      var watcherCount = 0;
-
-      function getWatchers(element) {
-        if (element.data().hasOwnProperty('$scope')) {
-          var watchers = element.data().$scope.$$watchers || [];
-          watcherCount += watchers.length;
-        }
-        angular.forEach(element.children(), function (childElement) {
-          getWatchers(angular.element(childElement));
-        });
+      var now = timerNow();
+      if (now - lastWatchCountRun > 500) {
+        lastWatchCountRun = now;
+        lastWatchCount = getWatcherCountForElement(angular.element(document.documentElement));
       }
+      return lastWatchCount;
+    }
 
-      getWatchers(root);
-
+    function getWatcherCountForElement(element) {
+      var watcherCount = 0;
+      if (!element || !element.length) {
+        return watcherCount;
+      }
+      var isolateWatchers = getWatchersFromScope(element.data().$isolateScope);
+      var scopeWatchers = getWatchersFromScope(element.data().$scope);
+      var watchers = scopeWatchers.concat(isolateWatchers);
+      watcherCount += watchers.length;
+      angular.forEach(element.children(), function (childElement) {
+        watcherCount += getWatcherCountForElement(angular.element(childElement));
+      });
       return watcherCount;
+    }
+
+    function getWatchersFromScope(scope) {
+      return scope && scope.$$watchers ? scope.$$watchers : [];
     }
 
     // start everything
     shiftLeft();
-    $scope.$digest();
+    $rootScope.$digest();
   }
 
   return showAngularStats;
