@@ -14,7 +14,7 @@ The first number is the number of watchers on the page (including `{{variables}}
 
 ## Install and use
 
-This actually is easiest to work with best as a [Chrome DevTools Snippit](https://developer.chrome.com/devtools/docs/authoring-development-workflow#snippets). Just copy/paste the `ng-stats.js` file into a snippit.
+This actually is easiest to work with best as a [Chrome DevTools Snippet](https://developer.chrome.com/devtools/docs/authoring-development-workflow#snippets). Just copy/paste the `ng-stats.js` file into a snippet.
 
 However, it uses UMD, so you can also include it in your app if you want via:
 
