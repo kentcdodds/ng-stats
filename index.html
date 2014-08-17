@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html ng-app="ngStatsDemo">
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>ng-stats demo</title>
+  <style>
+    .title {
+      text-align: center;
+    }
+  </style>
+</head>
+<body ng-controller="MainCtrl as vm">
+
+<div class="title">
+  <h1>ng-stats demo</h1>
+</div>
+<div>
+  <h2>Chart</h2>
+  <show-stats></show-stats>
+</div>
+<div>
+  <h2>Directive</h2>
+  <div angular-stats watch-count=".watch-count" digest-length=".digest-length">
+    Watch Count: <span class="watch-count"></span><br />
+    Digest Cycle Length: <span class="digest-length"></span>
+  </div>
+</div>
+
+<script src="angular.js"></script>
+<script src="ng-stats.js"></script>
+<script type="text/ng-template" id="show-stats-template">
+  <div>
+    <label>Top: <input type="radio" name="stats-tb" ng-model="tb" value="top"></label>
+    <label>Bottom: <input type="radio" name="stats-tb" ng-model="tb" value="bottom"></label>
+    <br />
+    <label>Left: <input type="radio" name="stats-lr" ng-model="lr" value="left"></label>
+    <label>Right: <input type="radio" name="stats-lr" ng-model="lr" value="right"></label>
+    <br />
+    <label>Digest Length Threshold: <input type="number" ng-model="threshold" min="0" /></label>
+    <br />
+    <label><input type="checkbox" ng-model="autoload" /> Autoload</label>
+    <br />
+    <button>Show Stats</button>
+    <a ng-click="hideStats()" href="#">Hide Stats</a>
+  </div>
+</script>
+<script>
+  (function() {
+    'use strict';
+    var app = angular.module('ngStatsDemo', ['angularStats']);
+    app.controller('MainCtrl', function MainCtrl() {
+      var vm = this;
+    });
+
+    // using directive to prevent a digest
+    app.directive('showStats', function() {
+      return {
+        restrict: 'E',
+        templateUrl: 'show-stats-template',
+        link: function(scope, el) {
+          initScopeWithPresets();
+          el.find('button').on('click', function showStats() {
+            showAngularStats({
+              position: scope.tb + scope.lr,
+              digestTimeThreshold: scope.threshold,
+              autoload: scope.autoload
+            });
+          });
+          scope.hideStats = function() {
+            showAngularStats(false);
+            initScopeWithPresets();
+          };
+
+          function initScopeWithPresets() {
+            var presets = JSON.parse(sessionStorage.getItem('showAngularStats_autoload'));
+            scope.autoload = !!presets;
+            presets = presets || {};
+            presets.position = presets.position || 'top-left';
+            presets.digestTimeThreshold = presets.digestTimeThreshold || 16;
+            presets.autoload = presets.autoload || false;
+
+            scope.tb = presets.position.indexOf('bottom') !== -1 ? 'bottom' : 'top';
+            scope.lr = presets.position.indexOf('right') !== -1 ? 'right' : 'left';
+            scope.threshold = presets.digestTimeThreshold;
+          }
+        }
+      }
+    });
+  })();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-42764912-1', 'doddsfamily.us');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
