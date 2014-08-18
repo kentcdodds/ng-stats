@@ -20,9 +20,19 @@
 </div>
 <div>
   <h2>Directive</h2>
-  <div angular-stats watch-count=".watch-count" digest-length=".digest-length">
+  <div angular-stats watch-count=".watch-count" digest-length=".digest-length"
+       on-watch-count-update="vm.onWatchCountUpdate(watchCount)"
+       on-digest-length-update="vm.onDigestLengthUpdate(digestLength)">
     Watch Count: <span class="watch-count"></span><br />
     Digest Cycle Length: <span class="digest-length"></span>
+  </div>
+</div>
+<div>
+  <h2>Watcher & Digest Simulation</h2>
+  <label>Total Items (watch count): <input type="number" ng-model="vm.itemCount" max="5000" min="0" /></label><br />
+  <label>Filter Wait (digest length): <input type="number" ng-model="vm.filterWait.waitTime" max="50" min="0" /></label>
+  <div ng-repeat="item in vm.totalItems">
+    {{item | longFilter}}
   </div>
 </div>
 
@@ -40,7 +50,7 @@
     <br />
     <label><input type="checkbox" ng-model="autoload" /> Autoload</label>
     <br />
-    <button>Show Stats</button>
+    <button>Show Stats</button> (must click to update)<br />
     <a ng-click="hideStats()" href="#">Hide Stats</a>
   </div>
 </script>
@@ -48,8 +58,28 @@
   (function() {
     'use strict';
     var app = angular.module('ngStatsDemo', ['angularStats']);
-    app.controller('MainCtrl', function MainCtrl() {
+    app.value('filterWait', {
+      waitTime: 10
+    });
+    app.controller('MainCtrl', function MainCtrl($scope, filterWait) {
       var vm = this;
+      vm.onWatchCountUpdate = function(count) {
+        console.log('onWatchCountUpdate', count);
+      };
+      vm.onDigestLengthUpdate = function(digestLength) {
+        console.log('onDigestLengthUpdate', digestLength);
+      };
+      vm.filterWait = filterWait;
+      vm.itemCount = 5;
+
+      $scope.$watch(function() {
+        return vm.itemCount;
+      }, function(newVal) {
+        vm.totalItems = [];
+        for (var i = 0; i < newVal; i++) {
+          vm.totalItems.push(i);
+        }
+      });
     });
 
     // using directive to prevent a digest
@@ -84,6 +114,17 @@
             scope.threshold = presets.digestTimeThreshold;
           }
         }
+      }
+    });
+
+    app.filter('longFilter', function(filterWait) {
+      'use strict';
+      return function longFilter(input) {
+        var now = new Date();
+        while(new Date() - now < filterWait.waitTime) {
+          // keep waiting...
+        }
+        return 'Item ' + input + ' waited ' + filterWait.waitTime + 'ms';
       }
     });
   })();

@@ -178,11 +178,14 @@
     'use strict';
     hijackDigest();
     return {
-      scope: true,
+      scope: {
+        digestLength: '@',
+        watchCount: '@',
+        watchCountRoot: '@',
+        onDigestLengthUpdate: '&?',
+        onWatchCountUpdate: '&?'
+      },
       link: function(scope, el, attrs) {
-        scope.ngStats = {
-          watchCount: 0
-        };
 
         if (attrs.hasOwnProperty('digestLength')) {
           var digestEl = el;
@@ -197,12 +200,12 @@
         if (attrs.hasOwnProperty('watchCount')) {
           var watchCountRoot;
           var watchCountEl = el;
-          if (attrs.watchCount) {
+          if (scope.watchCount) {
             watchCountEl = angular.element(el[0].querySelector(attrs.watchCount));
           }
 
-          if (attrs.watchCountRoot) {
-            if (attrs.watchCountRoot === 'this') {
+          if (scope.watchCountRoot) {
+            if (scope.watchCountRoot === 'this') {
               watchCountRoot = el;
             } else {
               // In the case this directive is being compiled and it's not in the dom,
@@ -213,9 +216,9 @@
               } else {
                 rootParent = findRootOfElement(el);
               }
-              watchCountRoot = angular.element(rootParent.querySelector(attrs.watchCountRoot));
+              watchCountRoot = angular.element(rootParent.querySelector(scope.watchCountRoot));
               if (!watchCountRoot.length) {
-                throw new Error('no element at selector: ' + attrs.watchCountRoot);
+                throw new Error('no element at selector: ' + scope.watchCountRoot);
               }
             }
           }
@@ -226,6 +229,18 @@
               watchCount = getWatcherCountForElement(watchCountRoot);
             }
             watchCountEl.text(watchCount);
+          });
+        }
+
+        if (scope.onWatchCountUpdate) {
+          listeners.watchCount.push(function(count) {
+            scope.onWatchCountUpdate({watchCount: count});
+          });
+        }
+
+        if (scope.onDigestLengthUpdate) {
+          listeners.digestLength.push(function(length) {
+            scope.onDigestLengthUpdate({digestLength: length});
           });
         }
       }
