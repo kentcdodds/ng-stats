@@ -7,12 +7,39 @@
     .title {
       text-align: center;
     }
+    body {
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+    pre {
+      padding: 12px;
+      background-color: #eee;
+    }
+    .item.hovering {
+      background-color: #eee;
+    }
+    strong {
+      display: block;
+      margin-top: 12px;
+    }
+    .footer {
+      text-align: center;
+      margin: 40px 0 20px 0;
+    }
   </style>
 </head>
 <body ng-controller="MainCtrl as vm">
 
 <div class="title">
   <h1>ng-stats demo</h1>
+  <small>Repo on <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></small>
+</div>
+<div style="margin-top:20px;">
+  This is a demo for a little utility to show stats about your page's angular digest/watches. This library currently
+  has a simple script to produce a chart. It also creates a module called `angularStats` which has a directive called
+  `angular-stats` which can be used to put angular stats on a specific place on the page that you specify.
 </div>
 <div>
   <h2>Chart</h2>
@@ -29,29 +56,56 @@
 </div>
 <div>
   <h2>Watcher & Digest Simulation</h2>
-  <label>Total Items (watch count): <input type="number" ng-model="vm.itemCount" max="5000" min="0" /></label><br />
-  <label>Filter Wait (digest length): <input type="number" ng-model="vm.filterWait.waitTime" max="50" min="0" /></label>
-  <div ng-repeat="item in vm.totalItems">
-    {{item | longFilter}}
+  <div>
+    <h3>Control Watch Count and Digest Length</h3>
+    <label>Total Items (watch count): <input type="number" ng-model="vm.itemCount" max="5000" min="0" /> items</label><br />
+    <label>Filter Wait (digest length): <input type="number" ng-model="vm.filterWait.waitTime" max="100" min="0" /> milliseconds</label>
+    <div>
+      <h4>Force Digests</h4>
+      You can force digests by mousing over the items below. Notice that the filter wait impacts performance more
+      quickly than the watch count... In fact, see the huge difference between 0 and 1 milliseconds on the filter wait.
+      This scenario is most likely to be the case in most apps, however, this demo illustrates the importance of keeping
+      your watcher expressions lightweight.
+    </div>
+    <br/>
+    <div ng-repeat="item in vm.totalItems" class="item" ng-class="{'hovering': vm.hovering[item]}" ng-mouseenter="vm.hovering[item]=true" ng-mouseleave="vm.hovering[item]=false">
+      {{item | longFilter}}
+    </div>
   </div>
 </div>
+
+<div class="footer">Created with ♥ by <a href="http://twitter.com/kentcdodds">Kent C. Dodds</a>
+|
+Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
 
 <script src="angular.js"></script>
 <script src="ng-stats.js"></script>
 <script type="text/ng-template" id="show-stats-template">
   <div>
-    <label>Top: <input type="radio" name="stats-tb" ng-model="tb" value="top"></label>
-    <label>Bottom: <input type="radio" name="stats-tb" ng-model="tb" value="bottom"></label>
-    <br />
-    <label>Left: <input type="radio" name="stats-lr" ng-model="lr" value="left"></label>
-    <label>Right: <input type="radio" name="stats-lr" ng-model="lr" value="right"></label>
-    <br />
-    <label>Digest Length Threshold: <input type="number" ng-model="threshold" min="0" /></label>
-    <br />
-    <label><input type="checkbox" ng-model="autoload" /> Autoload</label>
-    <br />
-    <button>Show Stats</button> (must click to update)<br />
-    <a ng-click="hideStats()" href="#">Hide Stats</a>
+    <div>
+      <strong>Position</strong>
+      <label>Top: <input type="radio" name="stats-tb" ng-model="controls.tb" value="top"></label>
+      <label>Bottom: <input type="radio" name="stats-tb" ng-model="controls.tb" value="bottom"></label>
+      <br />
+      <label>Left: <input type="radio" name="stats-lr" ng-model="controls.lr" value="left"></label>
+      <label>Right: <input type="radio" name="stats-lr" ng-model="controls.lr" value="right"></label>
+    </div>
+    <div>
+      <strong>Green - Red Control</strong>
+      <label>Digest Length Threshold: <input type="number" ng-model="controls.threshold" min="0" /></label>
+    </div>
+    <div>
+      <strong>Load on refresh</strong>
+      <label><input type="checkbox" ng-model="controls.autoload" /> Autoload</label>
+    </div>
+    <div>
+      <strong>Reset to default</strong>
+      <button ng-click="toggleVisibility()" href="#">{{chartVisible ? 'Hide' : 'Show'}} Chart</button>
+    </div>
+    <div>
+      <strong>Current chart options:</strong>
+      <pre ng-bind="chartOptions | chartOptions"></pre>
+    </div>
   </div>
 </script>
 <script>
@@ -59,7 +113,7 @@
     'use strict';
     var app = angular.module('ngStatsDemo', ['angularStats']);
     app.value('filterWait', {
-      waitTime: 10
+      waitTime: 3
     });
     app.controller('MainCtrl', function MainCtrl($scope, filterWait) {
       var vm = this;
@@ -70,7 +124,8 @@
         console.log('onDigestLengthUpdate', digestLength);
       };
       vm.filterWait = filterWait;
-      vm.itemCount = 5;
+      vm.itemCount = 10;
+      vm.hovering = {};
 
       $scope.$watch(function() {
         return vm.itemCount;
@@ -87,31 +142,55 @@
       return {
         restrict: 'E',
         templateUrl: 'show-stats-template',
-        link: function(scope, el) {
+        link: function(scope) {
+          scope.controls = {};
           initScopeWithPresets();
-          el.find('button').on('click', function showStats() {
-            showAngularStats({
-              position: scope.tb + scope.lr,
-              digestTimeThreshold: scope.threshold,
-              autoload: scope.autoload
-            });
-          });
-          scope.hideStats = function() {
-            showAngularStats(false);
-            initScopeWithPresets();
+          var watchRun = false; // don't autoload if that's not the preset...
+          scope.chartVisible = false;
+
+          scope.$watch('controls', function(newVal) {
+            if (!watchRun) {
+              watchRun = true;
+              if (!newVal.autoload) {
+                return;
+              }
+            }
+            updateChartOptions();
+            showAngularStats(scope.chartOptions);
+            scope.chartVisible = true;
+          }, true);
+
+          scope.toggleVisibility = function() {
+            if (scope.chartVisible) {
+              showAngularStats(false);
+              initScopeWithPresets();
+            } else {
+              updateChartOptions();
+              showAngularStats(scope.chartOptions);
+            }
+            scope.chartVisible = !scope.chartVisible;
           };
 
           function initScopeWithPresets() {
             var presets = JSON.parse(sessionStorage.getItem('showAngularStats_autoload'));
-            scope.autoload = !!presets;
+            scope.controls.autoload = !!presets;
             presets = presets || {};
             presets.position = presets.position || 'top-left';
             presets.digestTimeThreshold = presets.digestTimeThreshold || 16;
             presets.autoload = presets.autoload || false;
 
-            scope.tb = presets.position.indexOf('bottom') !== -1 ? 'bottom' : 'top';
-            scope.lr = presets.position.indexOf('right') !== -1 ? 'right' : 'left';
-            scope.threshold = presets.digestTimeThreshold;
+            scope.controls.tb = presets.position.indexOf('bottom') !== -1 ? 'bottom' : 'top';
+            scope.controls.lr = presets.position.indexOf('right') !== -1 ? 'right' : 'left';
+            scope.controls.threshold = presets.digestTimeThreshold;
+            updateChartOptions();
+          }
+
+          function updateChartOptions() {
+            scope.chartOptions = {
+              position: scope.controls.tb + scope.controls.lr,
+              digestTimeThreshold: scope.controls.threshold,
+              autoload: scope.controls.autoload
+            };
           }
         }
       }
@@ -124,7 +203,14 @@
         while(new Date() - now < filterWait.waitTime) {
           // keep waiting...
         }
-        return 'Item ' + input + ' waited ' + filterWait.waitTime + 'ms';
+        return 'Item ' + input + ' waited ' + (new Date() - now) + 'ms';
+      }
+    });
+
+    app.filter('chartOptions', function($filter) {
+      'use strict';
+      return function chartOptions(options) {
+        return 'showAngularStats(' + $filter('json')(options) + ');'
       }
     });
   })();

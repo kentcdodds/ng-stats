@@ -171,7 +171,9 @@
     // start everything
     shiftLeft();
     var $rootScope = bodyEl.injector().get('$rootScope');
-    $rootScope.$digest();
+    if(!$rootScope.$$phase) {
+      $rootScope.$digest();
+    }
   }
 
   angular.module('angularStats', []).directive('angularStats', function() {
