@@ -21,7 +21,8 @@
   var lastWatchCount = getWatcherCount() || 0;
   var lastDigestLength = 0;
 
-  var bodyEl = angular.element(document.body);
+  var $rootScope;
+
   var digestIsHijacked = false;
 
   var listeners = {
@@ -36,7 +37,7 @@
       return;
     }
     digestIsHijacked = true;
-    var $rootScope = bodyEl.injector().get('$rootScope');
+    var $rootScope = getRootScope();
     var scopePrototype = Object.getPrototypeOf($rootScope);
     var oldDigest = scopePrototype.$digest;
     scopePrototype.$digest = function $digest() {
@@ -54,7 +55,7 @@
   }
 
   function autoload(options) {
-    if (window.angular && angular.element(document.body).injector()) {
+    if (window.angular && getRootScope()) {
       showAngularStats(options);
     } else {
       // wait for angular to load...
@@ -97,6 +98,7 @@
     }
 
     // general variables
+    var bodyEl = angular.element(document.body);
     var noDigestSteps = 0;
 
     // add the DOM element
@@ -170,7 +172,6 @@
 
     // start everything
     shiftLeft();
-    var $rootScope = bodyEl.injector().get('$rootScope');
     if(!$rootScope.$$phase) {
       $rootScope.$digest();
     }
@@ -261,6 +262,24 @@
 
 
   // UTILITY FUNCTIONS
+
+  function getRootScope() {
+    if ($rootScope) {
+      return $rootScope;
+    }
+    var scopeEl = document.querySelector('.ng-scope');
+    if (!scopeEl) {
+      return null;
+    }
+
+    var injector = angular.element(scopeEl).injector();
+    if (!injector) {
+      return null;
+    }
+
+    $rootScope = injector.get('$rootScope');
+    return $rootScope;
+  }
 
   // Uses timeouts to ensure that this is only run every 300ms (it's a perf bottleneck)
   function getWatcherCount() {
