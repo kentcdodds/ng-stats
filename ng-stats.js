@@ -271,13 +271,7 @@
     if (!scopeEl) {
       return null;
     }
-
-    var injector = angular.element(scopeEl).injector();
-    if (!injector) {
-      return null;
-    }
-
-    $rootScope = injector.get('$rootScope');
+    $rootScope = angular.element(scopeEl).scope().$root;
     return $rootScope;
   }
 
@@ -287,7 +281,7 @@
     var now = timerNow();
     if (now - lastWatchCountRun > 300) {
       lastWatchCountRun = now;
-      lastWatchCount = getWatcherCountForElement(angular.element(document.documentElement));
+      lastWatchCount = getWatcherCountForScope();
     } else {
       watchCountTimeout = window.setTimeout(function() {
         updateData(getWatcherCount());
@@ -297,18 +291,18 @@
   }
 
   function getWatcherCountForElement(element) {
-    var watcherCount = 0;
-    if (!element || !element.length) {
-      return watcherCount;
+    var startingScope = getClosestChildScope(element);
+    return getWatcherCountForScope(startingScope);
+  }
+
+  function getClosestChildScope(element) {
+    element = angular.element(element);
+    var scope = element.scope();
+    if (!scope) {
+      element = angular.element(element.querySelector('.ng-scope'));
+      scope = element.scope();
     }
-    var isolateWatchers = getWatchersFromScope(element.data().$isolateScope);
-    var scopeWatchers = getWatchersFromScope(element.data().$scope);
-    var watchers = scopeWatchers.concat(isolateWatchers);
-    watcherCount += watchers.length;
-    angular.forEach(element.children(), function (childElement) {
-      watcherCount += getWatcherCountForElement(angular.element(childElement));
-    });
-    return watcherCount;
+    return scope;
   }
 
   function getWatchersFromScope(scope) {
@@ -332,6 +326,86 @@
 
   function nullOrUndef(item) {
     return item === null || item === undefined;
+  }
+
+  function getWatcherCountForScope(scope) {
+    var count = 0;
+    iterateScopes(scope, function(scope) {
+      count += getWatchersFromScope(scope).length;
+    });
+    return count;
+  }
+
+  function iterateScopes(current, fn) {
+    if (typeof current === 'function') {
+      fn = current;
+      current = null;
+    }
+    current = current || getRootScope();
+    current = _makeScopeReference(current);
+    if (!current) {
+      throw new Error('Could not find scope...');
+    }
+    var ret = fn(current);
+    if (ret === false) {
+      return ret;
+    }
+    return iterateChildren(current, fn);
+  }
+
+  function iterateSiblings(start, fn) {
+    var ret;
+    while (!!(start = start.$$nextSibling)) {
+      ret = fn(start);
+      if (ret === false) {
+        break;
+      }
+
+      ret = iterateChildren(start, fn);
+      if (ret === false) {
+        break;
+      }
+    }
+    return ret;
+  }
+
+  function iterateChildren(start, fn) {
+    var ret;
+    while (!!(start = start.$$childHead)) {
+      ret = fn(start);
+      if (ret === false) {
+        break;
+      }
+
+      ret = iterateSiblings(start, fn);
+      if (ret === false) {
+        break;
+      }
+    }
+    return ret;
+  }
+
+
+  function getScopeById(id) {
+    var myScope = null;
+    iterateScopes(function(scope) {
+      if (scope.$id === id) {
+        myScope = scope;
+        return false;
+      }
+    });
+    return myScope;
+  }
+
+  function _makeScopeReference(scope) {
+    if (_isScopeId(scope)) {
+      scope = getScopeById(scope);
+    }
+    return scope;
+  }
+
+  function _isScopeId(scope) {
+    return typeof scope === 'string' || typeof scope === 'number';
   }
 
 }));
