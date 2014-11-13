@@ -344,7 +344,7 @@
     current = current || getRootScope();
     current = _makeScopeReference(current);
     if (!current) {
-      throw new Error('Could not find scope...');
+      return;
     }
     var ret = fn(current);
     if (ret === false) {
