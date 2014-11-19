@@ -18,6 +18,12 @@ The first number is the number of watchers on the page (including `{{variables}}
 number is how long (in milliseconds) it takes angular to go through each digest cycle on average (bigger is worse). The
 graph shows a trend of the digest cycle average time.
 
+## Development
+
+1. `npm install`
+2. `grunt` for serving files
+3. `grunt release` for release
+
 ## Installation
 
 If you just want the chart for development purposes, it's actually easiest to use as a
