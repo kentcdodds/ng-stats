@@ -21,7 +21,7 @@ graph shows a trend of the digest cycle average time.
 ## Development
 
 1. `npm install`
-2. `grunt` for serving files
+2. `grunt` for server
 3. `grunt release` for release
 
 ## Installation

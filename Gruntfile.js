@@ -38,6 +38,6 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-express-server');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('release', ['clean', 'copy', 'uglify'])
+	grunt.registerTask('release', ['clean', 'uglify'])
 	grunt.registerTask('default', ['express:server', 'watch'])
 }
