@@ -4,13 +4,23 @@ module.exports = function(grunt){
 		clean: {
 			output: ['dist']
 		},
+		copy: {
+			main: {
+				files: [
+					{expand: true, cwd: 'src', src: ['index.html'], dest: 'dist/', filter: 'isFile'},
+					{expand: true, cwd: '', src: ['*.json'], dest: 'dist/', filter: 'isFile'},
+					{expand: true, cwd: '', src: ['README.md'], dest: 'dist/', filter: 'isFile'},
+					{expand: true, cwd: 'src/lib/angularjs', src: ['angular.js'], dest: 'dist/lib/angularjs', filter: 'isFile'}
+				]
+			}
+		},
 		uglify: {
 			options: {
 			    banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
 			  },
 			  dist: {
 			    files: {
-			      	'dist/<%= pkg.name %>.min.js': ['src/ng-stats.js']
+			      	'dist/<%= pkg.name %>.js': ['src/ng-stats.js']
 			    }
 			  }
 		},
@@ -30,6 +40,12 @@ module.exports = function(grunt){
 		            'src/**/*.*'
 		        ]
 		    }
+		},
+		'gh-pages': {
+			options: {
+				base: 'dist'
+			},
+			src: ['**/*.*']
 		}
 	})
 
@@ -37,7 +53,9 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-express-server');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-gh-pages');
 
-	grunt.registerTask('release', ['clean', 'uglify'])
+	grunt.registerTask('release', ['clean', 'copy', 'uglify', 'gh-pages'])
 	grunt.registerTask('default', ['express:server', 'watch'])
 }
