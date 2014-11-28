@@ -1,7 +1,7 @@
 {
   "name": "ng-stats",
   "main": "ng-stats.js",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "authors": [
     "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
     "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
@@ -28,5 +28,8 @@
     "*",
     "!README.md",
     "!ng-stats.js"
-  ]
+  ],
+  "dependencies": {
+    "angularjs": "~1.3.3"
+  }
 }
