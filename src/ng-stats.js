@@ -179,7 +179,6 @@
 
   angular.module('angularStats', []).directive('angularStats', function() {
     'use strict';
-    hijackDigest();
     return {
       scope: {
         digestLength: '@',
@@ -189,6 +188,7 @@
         onWatchCountUpdate: '&?'
       },
       link: function(scope, el, attrs) {
+        hijackDigest();
 
         if (attrs.hasOwnProperty('digestLength')) {
           var digestEl = el;
