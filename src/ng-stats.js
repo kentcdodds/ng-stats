@@ -12,8 +12,8 @@
   var autoloadKey = 'showAngularStats_autoload';
   var current = null;
   // define the timer function to use based upon whether or not 'performance is available'
-  var timerNow = window.performance
-    ? function() { return performance.now(); }
+  var timerNow = window.performance && window.performance.now
+    ? function() { return window.performance.now(); }
     : function() { return Date.now(); };
 
   var lastWatchCountRun = timerNow();
