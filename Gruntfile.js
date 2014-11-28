@@ -47,7 +47,7 @@ module.exports = function(grunt){
 			},
 			src: ['**/*.*']
 		}
-	})
+	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -56,6 +56,6 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-gh-pages');
 
-	grunt.registerTask('release', ['clean', 'copy', 'uglify', 'gh-pages'])
+	grunt.registerTask('release', ['clean', 'copy', 'uglify', 'gh-pages']);
 	grunt.registerTask('default', ['express:server', 'watch'])
-}
+};
