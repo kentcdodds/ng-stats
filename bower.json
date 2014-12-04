@@ -25,7 +25,7 @@
   "license": "MIT",
   "homepage": "https://github.com/kentcdodds/ng-stats",
   "ignore": [
-    "./!(dist/(bower.json|ng-stats.js|package.json|README.md))"
+    "./!(dist)"
   ],
   "dependencies": {
     "angularjs": "~1.3.3"
