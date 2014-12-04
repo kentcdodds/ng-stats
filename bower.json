@@ -25,7 +25,13 @@
   "license": "MIT",
   "homepage": "https://github.com/kentcdodds/ng-stats",
   "ignore": [
-    "./!(dist)"
+    "src",
+    "dist",
+    ".bowerrc",
+    ".gitignore",
+    "Gruntfile.js",
+    "server.js",
+    "!dist/ng-stats.js"
   ],
   "dependencies": {
     "angularjs": "~1.3.3"
