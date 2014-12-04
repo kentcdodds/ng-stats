@@ -1,4 +1,5 @@
 /node_modules
 /src/lib
-/dist
+/dist/lib
+/dist/index.html
 .grunt

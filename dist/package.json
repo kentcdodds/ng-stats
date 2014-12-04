@@ -1,0 +1,40 @@
+{
+  "name": "ng-stats",
+  "version": "1.0.6",
+  "description": "Little utility to show stats about your page's angular digest/watches.",
+  "main": "ng-stats.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kentcdodds/ng-stats.git"
+  },
+  "keywords": [
+    "angular",
+    "ng-stats",
+    "angularjs",
+    "utilities"
+  ],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+  "contributors": [
+    "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+    "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kentcdodds/ng-stats/issues"
+  },
+  "homepage": "https://github.com/kentcdodds/ng-stats",
+  "devDependencies": {
+    "connect-livereload": "^0.5.0",
+    "express": "^4.10.2",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-server": "^0.4.19",
+    "grunt-gh-pages": "^0.9.1"
+  }
+}
