@@ -29,7 +29,10 @@
     ".gitignore",
     ".bowerrc",
     "Gruntfile.js",
-    "server.js"
+    "server.js",
+    "bower.json",
+    "package.json",
+    "README.md"
   ],
   "dependencies": {
     "angularjs": "~1.3.3"
