@@ -27,11 +27,6 @@
   "ignore": [
     "src",
 
-    "dist/lib",
-    "dist/index.html",
-    "dist/*.json",
-    "dist/README.md",
-
     ".bowerrc",
     ".gitignore",
     "Gruntfile.js",
