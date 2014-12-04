@@ -26,12 +26,16 @@
   "homepage": "https://github.com/kentcdodds/ng-stats",
   "ignore": [
     "src",
-    "dist",
+
+    "dist/lib",
+    "dist/index.html",
+    "dist/*.json",
+    "dist/README.md",
+
     ".bowerrc",
     ".gitignore",
     "Gruntfile.js",
-    "server.js",
-    "!dist/ng-stats.js"
+    "server.js"
   ],
   "dependencies": {
     "angularjs": "~1.3.3"
