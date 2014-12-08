@@ -70,6 +70,8 @@ The time (in milliseconds) where it goes from red to green.
 
 Uses sessionStorage to store whether the graphic should be automatically loaded every time the page is reloaded.
 
+Note, if you pass `false` as options, it will simply remove the stats window: `showAngularStats(false)`
+
 ## Module
 
 Simply declare it as a dependency `angular.module('your-mod', ['angularStats']);`
