@@ -91,6 +91,11 @@ Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
       <label>Right: <input type="radio" name="stats-lr" ng-model="controls.lr" value="right"></label>
     </div>
     <div>
+      <strong>Logging</strong>
+      <label><input type="checkbox" ng-model="controls.logDigest" /> Log Digest</label>
+      <label><input type="checkbox" ng-model="controls.logWatches" /> Log Watches</label>
+    </div>
+    <div>
       <strong>Green - Red Control</strong>
       <label>Digest Length Threshold: <input type="number" ng-model="controls.threshold" min="0" /></label>
     </div>
@@ -113,18 +118,18 @@ Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
     'use strict';
     var app = angular.module('ngStatsDemo', ['angularStats']);
     app.value('filterWait', {
-      waitTime: 3
+      waitTime: 2
     });
     app.controller('MainCtrl', function MainCtrl($scope, filterWait) {
       var vm = this;
       vm.onWatchCountUpdate = function(count) {
-        console.log('onWatchCountUpdate', count);
+        // this is where you might do something
       };
       vm.onDigestLengthUpdate = function(digestLength) {
-        console.log('onDigestLengthUpdate', digestLength);
+        // this is where you might do something
       };
       vm.filterWait = filterWait;
-      vm.itemCount = 10;
+      vm.itemCount = 5;
       vm.hovering = {};
 
       $scope.$watch(function() {
@@ -173,15 +178,20 @@ Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
 
           function initScopeWithPresets() {
             var presets = JSON.parse(sessionStorage.getItem('showAngularStats_autoload'));
-            scope.controls.autoload = !!presets;
             presets = presets || {};
-            presets.position = presets.position || 'top-left';
-            presets.digestTimeThreshold = presets.digestTimeThreshold || 16;
-            presets.autoload = presets.autoload || false;
+            presets.autoload = !!presets;
+            presets = angular.extend({
+              position: 'top-left',
+              digestTimeThreshold: 16,
+              autoload: false,
+              logDigest: true,
+              logWatches: true
+            }, presets);
 
             scope.controls.tb = presets.position.indexOf('bottom') !== -1 ? 'bottom' : 'top';
             scope.controls.lr = presets.position.indexOf('right') !== -1 ? 'right' : 'left';
             scope.controls.threshold = presets.digestTimeThreshold;
+            angular.extend(scope.controls, presets);
             updateChartOptions();
           }
 
@@ -189,7 +199,9 @@ Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
             scope.chartOptions = {
               position: scope.controls.tb + scope.controls.lr,
               digestTimeThreshold: scope.controls.threshold,
-              autoload: scope.controls.autoload
+              autoload: scope.controls.autoload,
+              logDigest: scope.controls.logDigest,
+              logWatches: scope.controls.logWatches
             };
           }
         }
@@ -198,13 +210,15 @@ Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
 
     app.filter('longFilter', function(filterWait) {
       'use strict';
-      return function longFilter(input) {
+      function longFilter(input) {
         var now = new Date();
         while(new Date() - now < filterWait.waitTime) {
           // keep waiting...
         }
         return 'Item ' + input + ' waited ' + (new Date() - now) + 'ms';
       }
+      longFilter.$stateful = true; // makes it not cache the result based on the input
+      return longFilter;
     });
 
     app.filter('chartOptions', function($filter) {

@@ -52,7 +52,7 @@ You now have a `angularStats` module and `showAngularStats` function you can cal
 ### Usage
 
 Simply invoke `showAngularStats( { options } )` and the chart will appear. It also returns an object with a few handy
-things depending on your options. One of these things is `listeners` which is an object that has two arrays:
+things depending on your options. One of these things is `listeners` which is an object that has two objects:
 `digestLength` and `watchCount`. You can add a custom listener that is called when the digest cycles happen (though
 for performance reasons when calculating the watchCount, the `watchCount` listeners are throttled). Here's an example
 of adding custom listeners:
@@ -60,13 +60,13 @@ of adding custom listeners:
 ```javascript
 var ngStats = showAngularStats();
 
-ngStats.listeners.digestLength.push(function(digestLength) {
+ngStats.listeners.digestLength.nameOfYourListener = function(digestLength) {
   console.log('Digest: ' + digestLength);
-});
+};
 
-ngStats.listeners.watchCount.push(function(watchCount) {
+ngStats.listeners.watchCount.nameOfYourListener = function(watchCount) {
   console.log('Watches: ' + watchCount);
-});
+};
 ```
 
 ### Options

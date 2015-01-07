@@ -26,8 +26,8 @@
   var digestIsHijacked = false;
 
   var listeners = {
-    watchCount: [],
-    digestLength: []
+    watchCount: {},
+    digestLength: {}
   };
 
   // Hijack $digest to time it and update data on every digest.
@@ -132,13 +132,13 @@
 
 
     // add listeners
-    listeners.digestLength.push(function(digestLength) {
+    listeners.digestLength.ngStatsAddToCanvas = function(digestLength) {
       addDataToCanvas(null, digestLength);
-    });
+    };
 
-    listeners.watchCount.push(function(watchCount) {
+    listeners.watchCount.ngStatsAddToCanvas = function(watchCount) {
       addDataToCanvas(watchCount);
-    });
+    };
 
     track('digest', listeners.digestLength);
     track('watches', listeners.watchCount, true);
@@ -150,12 +150,12 @@
       var capThingToTrack = thingToTrack.charAt(0).toUpperCase() + thingToTrack.slice(1);
       if (opts['track' + capThingToTrack]) {
         returnData[thingToTrack] = [];
-        listenerCollection.push(function(tracked) {
+        listenerCollection['track + capThingToTrack'] = function(tracked) {
           if (!diffOnly || returnData[thingToTrack][returnData.length - 1] !== tracked) {
             returnData[thingToTrack][returnData.length - 1] = tracked;
             returnData[thingToTrack].push(tracked);
           }
-        });
+        };
       }
     }
 
@@ -163,7 +163,7 @@
       var capThingToLog = thingToLog.charAt(0).toUpperCase() + thingToLog.slice(1);
       if (opts['log' + capThingToLog]) {
         var last;
-        listenerCollection.push(function(tracked) {
+        listenerCollection['log' + capThingToLog] = function(tracked) {
           if (!diffOnly || last !== tracked) {
             last = tracked;
             var color = colorLog(thingToLog, tracked);
@@ -173,7 +173,7 @@
               console.log(thingToLog + ':', tracked);
             }
           }
-        });
+        };
       }
     }
 
@@ -232,6 +232,7 @@
 
   angular.module('angularStats', []).directive('angularStats', function() {
     'use strict';
+    var index = 1;
     return {
       scope: {
         digestLength: '@',
@@ -242,15 +243,16 @@
       },
       link: function(scope, el, attrs) {
         hijackDigest();
+        var directiveIndex = index++;
 
         if (attrs.hasOwnProperty('digestLength')) {
           var digestEl = el;
           if (attrs.digestLength) {
             digestEl = angular.element(el[0].querySelector(attrs.digestLength));
           }
-          listeners.digestLength.push(function(length) {
+          listeners.digestLength['ngStatsDirective' + directiveIndex] = function(length) {
             digestEl.text((length || 0).toFixed(2));
-          });
+          };
         }
 
         if (attrs.hasOwnProperty('watchCount')) {
@@ -279,26 +281,33 @@
             }
           }
 
-          listeners.watchCount.push(function(count) {
+          listeners.watchCount['ngStatsDirective' + directiveIndex] = function(count) {
             var watchCount = count;
             if (watchCountRoot) {
               watchCount = getWatcherCountForElement(watchCountRoot);
             }
             watchCountEl.text(watchCount);
-          });
+          };
         }
 
         if (scope.onWatchCountUpdate) {
-          listeners.watchCount.push(function(count) {
+          listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex] = function(count) {
             scope.onWatchCountUpdate({watchCount: count});
-          });
+          };
         }
 
         if (scope.onDigestLengthUpdate) {
-          listeners.digestLength.push(function(length) {
+          listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex] = function(length) {
             scope.onDigestLengthUpdate({digestLength: length});
-          });
+          };
         }
+
+        scope.$on('$destroy', function() {
+          delete listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex];
+          delete listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex];
+          delete listeners.digestLength['ngStatsDirective' + directiveIndex];
+          delete listeners.watchCount['ngStatsDirective' + directiveIndex];
+        });
       }
     };
 
