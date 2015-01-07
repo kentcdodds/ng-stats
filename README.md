@@ -51,7 +51,23 @@ You now have a `angularStats` module and `showAngularStats` function you can cal
 
 ### Usage
 
-Simply invoke `showAngularStats( { options } )` and the chart will appear.
+Simply invoke `showAngularStats( { options } )` and the chart will appear. It also returns an object with a few handy
+things depending on your options. One of these things is `listeners` which is an object that has two arrays:
+`digestLength` and `watchCount`. You can add a custom listener that is called when the digest cycles happen (though
+for performance reasons when calculating the watchCount, the `watchCount` listeners are throttled). Here's an example
+of adding custom listeners:
+
+```javascript
+var ngStats = showAngularStats();
+
+ngStats.listeners.digestLength.push(function(digestLength) {
+  console.log('Digest: ' + digestLength);
+});
+
+ngStats.listeners.watchCount.push(function(watchCount) {
+  console.log('Watches: ' + watchCount);
+});
+```
 
 ### Options
 
@@ -69,6 +85,27 @@ The time (in milliseconds) where it goes from red to green.
 #### autoload (boolean) - default: false
 
 Uses sessionStorage to store whether the graphic should be automatically loaded every time the page is reloaded.
+
+Note, if you pass `false` as options, it will simply remove the stats window: `showAngularStats(false)`
+
+#### trackDigest (boolean) - default: false
+
+`showAngularStats` returns an object. Setting this to true will add an array to that object called `digest` that holds
+all of the digest lengths.
+
+#### trackWatches (boolean) - default: false
+
+`showAngularStats` returns an object. Setting this to true will add an array to that object called `watches` that holds
+all of the watch counts as they change.
+
+#### logDigest (boolean) - default: false
+
+Setting this to true will cause ng-stats to log out the digest lengths to the console. It will be colored green or red
+based on the digestTimeThreshold.
+
+#### logWatches (boolean) - default: false
+
+Setting this to true will cause ng-stats to log out the watch count to the console as it changes.
 
 ## Module
 

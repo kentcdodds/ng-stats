@@ -1,7 +1,7 @@
 {
   "name": "ng-stats",
-  "main": "ng-stats.js",
-  "version": "1.0.6",
+  "main": "dist/ng-stats.js",
+  "version": "2.0.2",
   "authors": [
     "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
     "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
@@ -25,9 +25,11 @@
   "license": "MIT",
   "homepage": "https://github.com/kentcdodds/ng-stats",
   "ignore": [
-    "*",
-    "!README.md",
-    "!ng-stats.js"
+    "src",
+    ".gitignore",
+    ".bowerrc",
+    "Gruntfile.js",
+    "server.js"
   ],
   "dependencies": {
     "angularjs": "~1.3.3"
