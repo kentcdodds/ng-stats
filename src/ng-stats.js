@@ -26,7 +26,6 @@
   var digestIsHijacked = false;
 
   var listeners = {
-    digest: [],
     watchCount: [],
     digestLength: []
   };
@@ -66,6 +65,9 @@
   }
 
   function showAngularStats(opts) {
+    var returnData = {
+      listeners: listeners
+    };
     // delete the previous one
     if (current) {
       current.$el && current.$el.remove();
@@ -81,7 +83,11 @@
       opts = angular.extend({
         position: 'top-left',
         digestTimeThreshold: 16,
-        autoload: false
+        autoload: false,
+        trackDigest: false,
+        trackWatches: false,
+        logDigest: false,
+        logWatches: false
       }, opts || {});
     }
 
@@ -125,7 +131,7 @@
     var cvs = state.$el.find('canvas').attr(graphSz)[0];
 
 
-    // replace the digest
+    // add listeners
     listeners.digestLength.push(function(digestLength) {
       addDataToCanvas(null, digestLength);
     });
@@ -133,6 +139,51 @@
     listeners.watchCount.push(function(watchCount) {
       addDataToCanvas(watchCount);
     });
+
+    track('digest', listeners.digestLength);
+    track('watches', listeners.watchCount, true);
+
+    log('digest', listeners.digestLength);
+    log('watches', listeners.watchCount, true);
+
+    function track(thingToTrack, listenerCollection, diffOnly) {
+      var capThingToTrack = thingToTrack.charAt(0).toUpperCase() + thingToTrack.slice(1);
+      if (opts['track' + capThingToTrack]) {
+        returnData[thingToTrack] = [];
+        listenerCollection.push(function(tracked) {
+          if (!diffOnly || returnData[thingToTrack][returnData.length - 1] !== tracked) {
+            returnData[thingToTrack][returnData.length - 1] = tracked;
+            returnData[thingToTrack].push(tracked);
+          }
+        });
+      }
+    }
+
+    function log(thingToLog, listenerCollection, diffOnly) {
+      var capThingToLog = thingToLog.charAt(0).toUpperCase() + thingToLog.slice(1);
+      if (opts['log' + capThingToLog]) {
+        var last;
+        listenerCollection.push(function(tracked) {
+          if (!diffOnly || last !== tracked) {
+            last = tracked;
+            var color = colorLog(thingToLog, tracked);
+            if (color) {
+              console.log('%c' + thingToLog + ':', color, tracked);
+            } else {
+              console.log(thingToLog + ':', tracked);
+            }
+          }
+        });
+      }
+    }
+
+    function colorLog(thingToLog, tracked) {
+      var color;
+      if (thingToLog === 'digest') {
+        color = tracked > opts.digestTimeThreshold ? 'color:red' : 'color:green';
+      }
+      return color;
+    }
 
     function addDataToCanvas(watchCount, digestLength) {
       var averageDigest = digestLength || lastDigestLength;
@@ -175,6 +226,8 @@
     if(!$rootScope.$$phase) {
       $rootScope.$digest();
     }
+
+    return returnData;
   }
 
   angular.module('angularStats', []).directive('angularStats', function() {
