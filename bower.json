@@ -1,7 +1,7 @@
 {
   "name": "ng-stats",
   "main": "dist/ng-stats.js",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "authors": [
     "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
     "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
@@ -32,6 +32,6 @@
     "server.js"
   ],
   "dependencies": {
-    "angular": "~1.2.x"
+    "angular": ">=1.2.x"
   }
 }
