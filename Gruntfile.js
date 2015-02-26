@@ -8,9 +8,10 @@ module.exports = function(grunt){
 			main: {
 				files: [
 					{expand: true, cwd: 'src', src: ['index.html'], dest: 'dist/', filter: 'isFile'},
+					{expand: true, cwd: 'src', src: ['ng-stats.js'], dest: 'dist/', filter: 'isFile'},
 					{expand: true, cwd: '', src: ['*.json'], dest: 'dist/', filter: 'isFile'},
 					{expand: true, cwd: '', src: ['README.md'], dest: 'dist/', filter: 'isFile'},
-					{expand: true, cwd: 'src/lib/angularjs', src: ['angular.js'], dest: 'dist/lib/angularjs', filter: 'isFile'}
+					{expand: true, cwd: 'src/lib/angular', src: ['angular.js'], dest: 'dist/lib/angular', filter: 'isFile'}
 				]
 			}
 		},
@@ -20,7 +21,7 @@ module.exports = function(grunt){
 			  },
 			  dist: {
 			    files: {
-			      	'dist/<%= pkg.name %>.js': ['src/ng-stats.js']
+			      	'dist/<%= pkg.name %>.min.js': ['src/ng-stats.js']
 			    }
 			  }
 		},

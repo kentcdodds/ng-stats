@@ -1,4 +1,4 @@
-(function (root, factory) {
+(function(root, factory) {
   'use strict';
   if (typeof define === 'function' && define.amd) {
     define(factory);
@@ -13,8 +13,12 @@
   var current = null;
   // define the timer function to use based upon whether or not 'performance is available'
   var timerNow = window.performance && window.performance.now
-    ? function() { return window.performance.now(); }
-    : function() { return Date.now(); };
+    ? function() {
+    return window.performance.now();
+  }
+    : function() {
+    return Date.now();
+  };
 
   var lastWatchCountRun = timerNow();
   var watchCountTimeout = null;
@@ -80,25 +84,40 @@
       sessionStorage.removeItem(autoloadKey);
       return;
     } else {
+      opts.position = opts.position || 'top-left';
       opts = angular.extend({
-        position: 'top-left',
         digestTimeThreshold: 16,
         autoload: false,
         trackDigest: false,
         trackWatches: false,
         logDigest: false,
-        logWatches: false
+        logWatches: false,
+        styles: {
+          position: 'fixed',
+          background: 'black',
+          borderBottom: '1px solid #666',
+          borderRight: '1px solid #666',
+          color: 'red',
+          fontFamily: 'Courier',
+          width: 130,
+          zIndex: 9999,
+          textAlign: 'right',
+          top: opts.position.indexOf('top') == -1 ? null : 0,
+          bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
+          right: opts.position.indexOf('right') == -1 ? null : 0,
+          left: opts.position.indexOf('left') == -1 ? null : 0
+        }
       }, opts || {});
     }
 
     hijackDigest();
 
     // setup the state
-    var state = current = { active:true };
+    var state = current = {active: true};
 
     // auto-load on startup
     if (opts.autoload) {
-      sessionStorage.setItem(autoloadKey,JSON.stringify(opts));
+      sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
     } else {
       sessionStorage.removeItem(autoloadKey);
     }
@@ -108,26 +127,12 @@
     var noDigestSteps = 0;
 
     // add the DOM element
-    state.$el = angular.element('<div><canvas></canvas><div></div></div>').css({
-      position: 'fixed',
-      background: 'black',
-      borderBottom: '1px solid #666',
-      borderRight: '1px solid #666',
-      color: 'red',
-      fontFamily: 'Courier',
-      width: 130,
-      zIndex: 9999,
-      top: opts.position.indexOf('top') == -1 ? null : 0,
-      bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
-      right: opts.position.indexOf('right') == -1 ? null : 0,
-      left: opts.position.indexOf('left') == -1 ? null : 0,
-      textAlign: 'right'
-    });
+    state.$el = angular.element('<div><canvas></canvas><div></div></div>').css(opts.styles);
     bodyEl.append(state.$el);
     var $text = state.$el.find('div');
 
     // initialize the canvas
-    var graphSz = { width: 130, height: 40 };
+    var graphSz = {width: 130, height: 40};
     var cvs = state.$el.find('canvas').attr(graphSz)[0];
 
 
@@ -190,7 +195,7 @@
       var color = (averageDigest > opts.digestTimeThreshold) ? 'red' : 'green';
       lastWatchCount = nullOrUndef(watchCount) ? lastWatchCount : watchCount;
       lastDigestLength = nullOrUndef(digestLength) ? lastDigestLength : digestLength;
-      $text.text(lastWatchCount + ' | ' + lastDigestLength.toFixed(2)).css({color:color});
+      $text.text(lastWatchCount + ' | ' + lastDigestLength.toFixed(2)).css({color: color});
 
       if (!digestLength) {
         return;
@@ -206,24 +211,24 @@
 
       // mark the point on the graph
       ctx.fillStyle = color;
-      ctx.fillRect(graphSz.width-1,Math.max(0,graphSz.height - averageDigest),2,2);
+      ctx.fillRect(graphSz.width - 1, Math.max(0, graphSz.height - averageDigest), 2, 2);
     }
 
     //! Shift the canvas to the left.
     function shiftLeft() {
       if (state.active) {
-        window.setTimeout(shiftLeft,250);
+        window.setTimeout(shiftLeft, 250);
         var ctx = cvs.getContext('2d');
-        var imageData = ctx.getImageData(1,0,graphSz.width-1,graphSz.height);
-        ctx.putImageData(imageData,0,0);
-        ctx.fillStyle = ((noDigestSteps++)>2) ? 'black' : '#333';
-        ctx.fillRect(graphSz.width-1,0,1,graphSz.height);
+        var imageData = ctx.getImageData(1, 0, graphSz.width - 1, graphSz.height);
+        ctx.putImageData(imageData, 0, 0);
+        ctx.fillStyle = ((noDigestSteps++) > 2) ? 'black' : '#333';
+        ctx.fillRect(graphSz.width - 1, 0, 1, graphSz.height);
       }
     }
 
     // start everything
     shiftLeft();
-    if(!$rootScope.$$phase) {
+    if (!$rootScope.$$phase) {
       $rootScope.$digest();
     }
 
