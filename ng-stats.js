@@ -1,2 +1,478 @@
-/*! ng-stats 2.0.4 created by Kent C. Dodds | 2015-01-07 */
-!function(a,b){"use strict";"function"==typeof define&&define.amd?define(b):"undefined"!=typeof module&&module.exports?module.exports=b:a.showAngularStats=b()}(window,function(){"use strict";function a(){if(!z){z=!0;var a=d(),b=Object.getPrototypeOf(a),c=b.$digest;b.$digest=function(){var a=u();c.apply(this,arguments);var b=u()-a;i(e(),b)}}}function b(a){window.angular&&d()?c(a):window.setTimeout(function(){b(a)},200)}function c(b){function c(a,c,d){var e=a.charAt(0).toUpperCase()+a.slice(1);b["track"+e]&&(h[a]=[],c["track + capThingToTrack"]=function(b){d&&h[a][h.length-1]===b||(h[a][h.length-1]=b,h[a].push(b))})}function d(a,c,d){var f=a.charAt(0).toUpperCase()+a.slice(1);if(b["log"+f]){var g;c["log"+f]=function(b){if(!d||g!==b){g=b;var c=e(a,b);c?console.log("%c"+a+":",c,b):console.log(a+":",b)}}}}function e(a,c){var d;return"digest"===a&&(d=c>b.digestTimeThreshold?"color:red":"color:green"),d}function f(a,c){var d=c||y,e=d>b.digestTimeThreshold?"red":"green";if(x=j(a)?x:a,y=j(c)?y:c,m.text(x+" | "+y.toFixed(2)).css({color:e}),c){var f=o.getContext("2d");l>0&&(l=0,f.fillStyle="#333",f.fillRect(n.width-1,0,1,n.height)),f.fillStyle=e,f.fillRect(n.width-1,Math.max(0,n.height-d),2,2)}}function g(){if(i.active){window.setTimeout(g,250);var a=o.getContext("2d"),b=a.getImageData(1,0,n.width-1,n.height);a.putImageData(b,0,0),a.fillStyle=l++>2?"black":"#333",a.fillRect(n.width-1,0,1,n.height)}}var h={listeners:A};if(t&&(t.$el&&t.$el.remove(),t.active=!1,t=null),b===!1)return void sessionStorage.removeItem(s);b=angular.extend({position:"top-left",digestTimeThreshold:16,autoload:!1,trackDigest:!1,trackWatches:!1,logDigest:!1,logWatches:!1},b||{}),a();var i=t={active:!0};b.autoload?sessionStorage.setItem(s,JSON.stringify(b)):sessionStorage.removeItem(s);var k=angular.element(document.body),l=0;i.$el=angular.element("<div><canvas></canvas><div></div></div>").css({position:"fixed",background:"black",borderBottom:"1px solid #666",borderRight:"1px solid #666",color:"red",fontFamily:"Courier",width:130,zIndex:9999,top:-1==b.position.indexOf("top")?null:0,bottom:-1==b.position.indexOf("bottom")?null:0,right:-1==b.position.indexOf("right")?null:0,left:-1==b.position.indexOf("left")?null:0,textAlign:"right"}),k.append(i.$el);var m=i.$el.find("div"),n={width:130,height:40},o=i.$el.find("canvas").attr(n)[0];return A.digestLength.ngStatsAddToCanvas=function(a){f(null,a)},A.watchCount.ngStatsAddToCanvas=function(a){f(a)},c("digest",A.digestLength),c("watches",A.watchCount,!0),d("digest",A.digestLength),d("watches",A.watchCount,!0),g(),r.$$phase||r.$digest(),h}function d(){if(r)return r;var a=document.querySelector(".ng-scope");return a?r=angular.element(a).scope().$root:null}function e(){window.clearTimeout(w);var a=u();return a-v>300?(v=a,x=k()):w=window.setTimeout(function(){i(e())},350),x}function f(a){var b=g(a);return k(b)}function g(a){a=angular.element(a);var b=a.scope();return b||(a=angular.element(a.querySelector(".ng-scope")),b=a.scope()),b}function h(a){return a&&a.$$watchers?a.$$watchers:[]}function i(a,b){j(a)||angular.forEach(A.watchCount,function(b){b(a)}),j(b)||angular.forEach(A.digestLength,function(a){a(b)})}function j(a){return null===a||void 0===a}function k(a){var b=0;return l(a,function(a){b+=h(a).length}),b}function l(a,b){if("function"==typeof a&&(b=a,a=null),a=a||d(),a=p(a)){var c=b(a);return c===!1?c:n(a,b)}}function m(a,b){for(var c;(a=a.$$nextSibling)&&(c=b(a),c!==!1)&&(c=n(a,b),c!==!1););return c}function n(a,b){for(var c;(a=a.$$childHead)&&(c=b(a),c!==!1)&&(c=m(a,b),c!==!1););return c}function o(a){var b=null;return l(function(c){return c.$id===a?(b=c,!1):void 0}),b}function p(a){return q(a)&&(a=o(a)),a}function q(a){return"string"==typeof a||"number"==typeof a}var r,s="showAngularStats_autoload",t=null,u=window.performance&&window.performance.now?function(){return window.performance.now()}:function(){return Date.now()},v=u(),w=null,x=e()||0,y=0,z=!1,A={watchCount:{},digestLength:{}},B=sessionStorage[s];return B&&b(JSON.parse(B)),angular.module("angularStats",[]).directive("angularStats",function(){function b(a){for(var b=a[0];b.parentElement;)b=b.parentElement;return b}var c=1;return{scope:{digestLength:"@",watchCount:"@",watchCountRoot:"@",onDigestLengthUpdate:"&?",onWatchCountUpdate:"&?"},link:function(d,e,g){a();var h=c++;if(g.hasOwnProperty("digestLength")){var i=e;g.digestLength&&(i=angular.element(e[0].querySelector(g.digestLength))),A.digestLength["ngStatsDirective"+h]=function(a){i.text((a||0).toFixed(2))}}if(g.hasOwnProperty("watchCount")){var j,k=e;if(d.watchCount&&(k=angular.element(e[0].querySelector(g.watchCount))),d.watchCountRoot)if("this"===d.watchCountRoot)j=e;else{var l;if(l=g.hasOwnProperty("watchCountOfChild")?e[0]:b(e),j=angular.element(l.querySelector(d.watchCountRoot)),!j.length)throw new Error("no element at selector: "+d.watchCountRoot)}A.watchCount["ngStatsDirective"+h]=function(a){var b=a;j&&(b=f(j)),k.text(b)}}d.onWatchCountUpdate&&(A.watchCount["ngStatsDirectiveUpdate"+h]=function(a){d.onWatchCountUpdate({watchCount:a})}),d.onDigestLengthUpdate&&(A.digestLength["ngStatsDirectiveUpdate"+h]=function(a){d.onDigestLengthUpdate({digestLength:a})}),d.$on("$destroy",function(){delete A.digestLength["ngStatsDirectiveUpdate"+h],delete A.watchCount["ngStatsDirectiveUpdate"+h],delete A.digestLength["ngStatsDirective"+h],delete A.watchCount["ngStatsDirective"+h]})}}}),c});
+(function(root, factory) {
+  'use strict';
+  if (typeof define === 'function' && define.amd) {
+    define(factory);
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = factory;
+  } else {
+    root.showAngularStats = factory();
+  }
+}(window, function() {
+  'use strict';
+  var autoloadKey = 'showAngularStats_autoload';
+  var current = null;
+  // define the timer function to use based upon whether or not 'performance is available'
+  var timerNow = window.performance && window.performance.now
+    ? function() {
+    return window.performance.now();
+  }
+    : function() {
+    return Date.now();
+  };
+
+  var lastWatchCountRun = timerNow();
+  var watchCountTimeout = null;
+  var lastWatchCount = getWatcherCount() || 0;
+  var lastDigestLength = 0;
+
+  var $rootScope;
+
+  var digestIsHijacked = false;
+
+  var listeners = {
+    watchCount: {},
+    digestLength: {}
+  };
+
+  // Hijack $digest to time it and update data on every digest.
+  function hijackDigest() {
+    if (digestIsHijacked) {
+      return;
+    }
+    digestIsHijacked = true;
+    var $rootScope = getRootScope();
+    var scopePrototype = Object.getPrototypeOf($rootScope);
+    var oldDigest = scopePrototype.$digest;
+    scopePrototype.$digest = function $digest() {
+      var start = timerNow();
+      oldDigest.apply(this, arguments);
+      var diff = (timerNow() - start);
+      updateData(getWatcherCount(), diff);
+    };
+  }
+
+  // check for autoload
+  var autoloadOptions = sessionStorage[autoloadKey];
+  if (autoloadOptions) {
+    autoload(JSON.parse(autoloadOptions));
+  }
+
+  function autoload(options) {
+    if (window.angular && getRootScope()) {
+      showAngularStats(options);
+    } else {
+      // wait for angular to load...
+      window.setTimeout(function() {
+        autoload(options);
+      }, 200);
+    }
+  }
+
+  function showAngularStats(opts) {
+    var returnData = {
+      listeners: listeners
+    };
+    // delete the previous one
+    if (current) {
+      current.$el && current.$el.remove();
+      current.active = false;
+      current = null;
+    }
+
+    // do nothing if the argument is false
+    if (opts === false) {
+      sessionStorage.removeItem(autoloadKey);
+      return;
+    } else {
+      opts.position = opts.position || 'top-left';
+      opts = angular.extend({
+        digestTimeThreshold: 16,
+        autoload: false,
+        trackDigest: false,
+        trackWatches: false,
+        logDigest: false,
+        logWatches: false,
+        styles: {
+          position: 'fixed',
+          background: 'black',
+          borderBottom: '1px solid #666',
+          borderRight: '1px solid #666',
+          color: 'red',
+          fontFamily: 'Courier',
+          width: 130,
+          zIndex: 9999,
+          textAlign: 'right',
+          top: opts.position.indexOf('top') == -1 ? null : 0,
+          bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
+          right: opts.position.indexOf('right') == -1 ? null : 0,
+          left: opts.position.indexOf('left') == -1 ? null : 0
+        }
+      }, opts || {});
+    }
+
+    hijackDigest();
+
+    // setup the state
+    var state = current = {active: true};
+
+    // auto-load on startup
+    if (opts.autoload) {
+      sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
+    } else {
+      sessionStorage.removeItem(autoloadKey);
+    }
+
+    // general variables
+    var bodyEl = angular.element(document.body);
+    var noDigestSteps = 0;
+
+    // add the DOM element
+    state.$el = angular.element('<div><canvas></canvas><div></div></div>').css(opts.styles);
+    bodyEl.append(state.$el);
+    var $text = state.$el.find('div');
+
+    // initialize the canvas
+    var graphSz = {width: 130, height: 40};
+    var cvs = state.$el.find('canvas').attr(graphSz)[0];
+
+
+    // add listeners
+    listeners.digestLength.ngStatsAddToCanvas = function(digestLength) {
+      addDataToCanvas(null, digestLength);
+    };
+
+    listeners.watchCount.ngStatsAddToCanvas = function(watchCount) {
+      addDataToCanvas(watchCount);
+    };
+
+    track('digest', listeners.digestLength);
+    track('watches', listeners.watchCount, true);
+
+    log('digest', listeners.digestLength);
+    log('watches', listeners.watchCount, true);
+
+    function track(thingToTrack, listenerCollection, diffOnly) {
+      var capThingToTrack = thingToTrack.charAt(0).toUpperCase() + thingToTrack.slice(1);
+      if (opts['track' + capThingToTrack]) {
+        returnData[thingToTrack] = [];
+        listenerCollection['track + capThingToTrack'] = function(tracked) {
+          if (!diffOnly || returnData[thingToTrack][returnData.length - 1] !== tracked) {
+            returnData[thingToTrack][returnData.length - 1] = tracked;
+            returnData[thingToTrack].push(tracked);
+          }
+        };
+      }
+    }
+
+    function log(thingToLog, listenerCollection, diffOnly) {
+      var capThingToLog = thingToLog.charAt(0).toUpperCase() + thingToLog.slice(1);
+      if (opts['log' + capThingToLog]) {
+        var last;
+        listenerCollection['log' + capThingToLog] = function(tracked) {
+          if (!diffOnly || last !== tracked) {
+            last = tracked;
+            var color = colorLog(thingToLog, tracked);
+            if (color) {
+              console.log('%c' + thingToLog + ':', color, tracked);
+            } else {
+              console.log(thingToLog + ':', tracked);
+            }
+          }
+        };
+      }
+    }
+
+    function colorLog(thingToLog, tracked) {
+      var color;
+      if (thingToLog === 'digest') {
+        color = tracked > opts.digestTimeThreshold ? 'color:red' : 'color:green';
+      }
+      return color;
+    }
+
+    function addDataToCanvas(watchCount, digestLength) {
+      var averageDigest = digestLength || lastDigestLength;
+      var color = (averageDigest > opts.digestTimeThreshold) ? 'red' : 'green';
+      lastWatchCount = nullOrUndef(watchCount) ? lastWatchCount : watchCount;
+      lastDigestLength = nullOrUndef(digestLength) ? lastDigestLength : digestLength;
+      $text.text(lastWatchCount + ' | ' + lastDigestLength.toFixed(2)).css({color: color});
+
+      if (!digestLength) {
+        return;
+      }
+
+      // color the sliver if this is the first step
+      var ctx = cvs.getContext('2d');
+      if (noDigestSteps > 0) {
+        noDigestSteps = 0;
+        ctx.fillStyle = '#333';
+        ctx.fillRect(graphSz.width - 1, 0, 1, graphSz.height);
+      }
+
+      // mark the point on the graph
+      ctx.fillStyle = color;
+      ctx.fillRect(graphSz.width - 1, Math.max(0, graphSz.height - averageDigest), 2, 2);
+    }
+
+    //! Shift the canvas to the left.
+    function shiftLeft() {
+      if (state.active) {
+        window.setTimeout(shiftLeft, 250);
+        var ctx = cvs.getContext('2d');
+        var imageData = ctx.getImageData(1, 0, graphSz.width - 1, graphSz.height);
+        ctx.putImageData(imageData, 0, 0);
+        ctx.fillStyle = ((noDigestSteps++) > 2) ? 'black' : '#333';
+        ctx.fillRect(graphSz.width - 1, 0, 1, graphSz.height);
+      }
+    }
+
+    // start everything
+    shiftLeft();
+    if (!$rootScope.$$phase) {
+      $rootScope.$digest();
+    }
+
+    return returnData;
+  }
+
+  angular.module('angularStats', []).directive('angularStats', function() {
+    'use strict';
+    var index = 1;
+    return {
+      scope: {
+        digestLength: '@',
+        watchCount: '@',
+        watchCountRoot: '@',
+        onDigestLengthUpdate: '&?',
+        onWatchCountUpdate: '&?'
+      },
+      link: function(scope, el, attrs) {
+        hijackDigest();
+        var directiveIndex = index++;
+
+        if (attrs.hasOwnProperty('digestLength')) {
+          var digestEl = el;
+          if (attrs.digestLength) {
+            digestEl = angular.element(el[0].querySelector(attrs.digestLength));
+          }
+          listeners.digestLength['ngStatsDirective' + directiveIndex] = function(length) {
+            digestEl.text((length || 0).toFixed(2));
+          };
+        }
+
+        if (attrs.hasOwnProperty('watchCount')) {
+          var watchCountRoot;
+          var watchCountEl = el;
+          if (scope.watchCount) {
+            watchCountEl = angular.element(el[0].querySelector(attrs.watchCount));
+          }
+
+          if (scope.watchCountRoot) {
+            if (scope.watchCountRoot === 'this') {
+              watchCountRoot = el;
+            } else {
+              // In the case this directive is being compiled and it's not in the dom,
+              // we're going to do the find from the root of what we have...
+              var rootParent;
+              if (attrs.hasOwnProperty('watchCountOfChild')) {
+                rootParent = el[0];
+              } else {
+                rootParent = findRootOfElement(el);
+              }
+              watchCountRoot = angular.element(rootParent.querySelector(scope.watchCountRoot));
+              if (!watchCountRoot.length) {
+                throw new Error('no element at selector: ' + scope.watchCountRoot);
+              }
+            }
+          }
+
+          listeners.watchCount['ngStatsDirective' + directiveIndex] = function(count) {
+            var watchCount = count;
+            if (watchCountRoot) {
+              watchCount = getWatcherCountForElement(watchCountRoot);
+            }
+            watchCountEl.text(watchCount);
+          };
+        }
+
+        if (scope.onWatchCountUpdate) {
+          listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex] = function(count) {
+            scope.onWatchCountUpdate({watchCount: count});
+          };
+        }
+
+        if (scope.onDigestLengthUpdate) {
+          listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex] = function(length) {
+            scope.onDigestLengthUpdate({digestLength: length});
+          };
+        }
+
+        scope.$on('$destroy', function() {
+          delete listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex];
+          delete listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex];
+          delete listeners.digestLength['ngStatsDirective' + directiveIndex];
+          delete listeners.watchCount['ngStatsDirective' + directiveIndex];
+        });
+      }
+    };
+
+    function findRootOfElement(el) {
+      var parent = el[0];
+      while (parent.parentElement) {
+        parent = parent.parentElement;
+      }
+      return parent;
+    }
+  });
+
+  return showAngularStats;
+
+
+  // UTILITY FUNCTIONS
+
+  function getRootScope() {
+    if ($rootScope) {
+      return $rootScope;
+    }
+    var scopeEl = document.querySelector('.ng-scope');
+    if (!scopeEl) {
+      return null;
+    }
+    $rootScope = angular.element(scopeEl).scope().$root;
+    return $rootScope;
+  }
+
+  // Uses timeouts to ensure that this is only run every 300ms (it's a perf bottleneck)
+  function getWatcherCount() {
+    window.clearTimeout(watchCountTimeout);
+    var now = timerNow();
+    if (now - lastWatchCountRun > 300) {
+      lastWatchCountRun = now;
+      lastWatchCount = getWatcherCountForScope();
+    } else {
+      watchCountTimeout = window.setTimeout(function() {
+        updateData(getWatcherCount());
+      }, 350);
+    }
+    return lastWatchCount;
+  }
+
+  function getWatcherCountForElement(element) {
+    var startingScope = getClosestChildScope(element);
+    return getWatcherCountForScope(startingScope);
+  }
+
+  function getClosestChildScope(element) {
+    element = angular.element(element);
+    var scope = element.scope();
+    if (!scope) {
+      element = angular.element(element.querySelector('.ng-scope'));
+      scope = element.scope();
+    }
+    return scope;
+  }
+
+  function getWatchersFromScope(scope) {
+    return scope && scope.$$watchers ? scope.$$watchers : [];
+  }
+
+  // iterate through listeners to call them with the watchCount and digestLength
+  function updateData(watchCount, digestLength) {
+    // update the listeners
+    if (!nullOrUndef(watchCount)) {
+      angular.forEach(listeners.watchCount, function(listener) {
+        listener(watchCount);
+      });
+    }
+    if (!nullOrUndef(digestLength)) {
+      angular.forEach(listeners.digestLength, function(listener) {
+        listener(digestLength);
+      });
+    }
+  }
+
+  function nullOrUndef(item) {
+    return item === null || item === undefined;
+  }
+
+  function getWatcherCountForScope(scope) {
+    var count = 0;
+    iterateScopes(scope, function(scope) {
+      count += getWatchersFromScope(scope).length;
+    });
+    return count;
+  }
+
+  function iterateScopes(current, fn) {
+    if (typeof current === 'function') {
+      fn = current;
+      current = null;
+    }
+    current = current || getRootScope();
+    current = _makeScopeReference(current);
+    if (!current) {
+      return;
+    }
+    var ret = fn(current);
+    if (ret === false) {
+      return ret;
+    }
+    return iterateChildren(current, fn);
+  }
+
+  function iterateSiblings(start, fn) {
+    var ret;
+    while (!!(start = start.$$nextSibling)) {
+      ret = fn(start);
+      if (ret === false) {
+        break;
+      }
+
+      ret = iterateChildren(start, fn);
+      if (ret === false) {
+        break;
+      }
+    }
+    return ret;
+  }
+
+  function iterateChildren(start, fn) {
+    var ret;
+    while (!!(start = start.$$childHead)) {
+      ret = fn(start);
+      if (ret === false) {
+        break;
+      }
+
+      ret = iterateSiblings(start, fn);
+      if (ret === false) {
+        break;
+      }
+    }
+    return ret;
+  }
+
+
+  function getScopeById(id) {
+    var myScope = null;
+    iterateScopes(function(scope) {
+      if (scope.$id === id) {
+        myScope = scope;
+        return false;
+      }
+    });
+    return myScope;
+  }
+
+  function _makeScopeReference(scope) {
+    if (_isScopeId(scope)) {
+      scope = getScopeById(scope);
+    }
+    return scope;
+  }
+
+  function _isScopeId(scope) {
+    return typeof scope === 'string' || typeof scope === 'number';
+  }
+
+}));
