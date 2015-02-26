@@ -1,3 +1,7 @@
+# 2.1.2
+
+- In a moment of pure idiocy, I ignored the dist directory...
+
 # 2.1.1
 
 - Fixing angular bower dependency (again... [#14](/../../issues/14))
