@@ -69,6 +69,7 @@
   }
 
   function showAngularStats(opts) {
+    opts = opts || {};
     var returnData = {
       listeners: listeners
     };
