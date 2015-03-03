@@ -9,8 +9,6 @@ module.exports = function(grunt){
 				files: [
 					{expand: true, cwd: 'src', src: ['index.html'], dest: 'dist/', filter: 'isFile'},
 					{expand: true, cwd: 'src', src: ['ng-stats.js'], dest: 'dist/', filter: 'isFile'},
-					{expand: true, cwd: '', src: ['*.json'], dest: 'dist/', filter: 'isFile'},
-					{expand: true, cwd: '', src: ['README.md'], dest: 'dist/', filter: 'isFile'},
 					{expand: true, cwd: 'src/lib/angular', src: ['angular.js'], dest: 'dist/lib/angular', filter: 'isFile'}
 				]
 			}
