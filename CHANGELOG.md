@@ -1,4 +1,4 @@
-# 2.1.3
+# 2.1.4
 
 - Adding localStorage [#19](/../../pull/19)
 - Fixing options issue [#20](/../../pull/20)
