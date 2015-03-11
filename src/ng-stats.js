@@ -52,7 +52,7 @@
   }
 
   // check for autoload
-  var autoloadOptions = sessionStorage[autoloadKey];
+  var autoloadOptions = sessionStorage[autoloadKey] || localStorage[autoloadKey];
   if (autoloadOptions) {
     autoload(JSON.parse(autoloadOptions));
   }
@@ -69,7 +69,7 @@
   }
 
   function showAngularStats(opts) {
-    opts = opts || {};
+    opts = opts !== undefined ? opts : {};
     var returnData = {
       listeners: listeners
     };
@@ -80,36 +80,40 @@
       current = null;
     }
 
-    // do nothing if the argument is false
-    if (opts === false) {
+    // Remove autoload if they did not specifically request it
+    if (opts === false || !opts.autoload) {
       sessionStorage.removeItem(autoloadKey);
-      return;
-    } else {
-      opts.position = opts.position || 'top-left';
-      opts = angular.extend({
-        digestTimeThreshold: 16,
-        autoload: false,
-        trackDigest: false,
-        trackWatches: false,
-        logDigest: false,
-        logWatches: false,
-        styles: {
-          position: 'fixed',
-          background: 'black',
-          borderBottom: '1px solid #666',
-          borderRight: '1px solid #666',
-          color: 'red',
-          fontFamily: 'Courier',
-          width: 130,
-          zIndex: 9999,
-          textAlign: 'right',
-          top: opts.position.indexOf('top') == -1 ? null : 0,
-          bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
-          right: opts.position.indexOf('right') == -1 ? null : 0,
-          left: opts.position.indexOf('left') == -1 ? null : 0
-        }
-      }, opts || {});
+      localStorage.removeItem(autoloadKey);
+      // do nothing if the argument is false
+      if (opts === false) {
+        return;
+      }
     }
+
+    opts.position = opts.position || 'top-left';
+    opts = angular.extend({
+      digestTimeThreshold: 16,
+      autoload: false,
+      trackDigest: false,
+      trackWatches: false,
+      logDigest: false,
+      logWatches: false,
+      styles: {
+        position: 'fixed',
+        background: 'black',
+        borderBottom: '1px solid #666',
+        borderRight: '1px solid #666',
+        color: 'red',
+        fontFamily: 'Courier',
+        width: 130,
+        zIndex: 9999,
+        textAlign: 'right',
+        top: opts.position.indexOf('top') == -1 ? null : 0,
+        bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
+        right: opts.position.indexOf('right') == -1 ? null : 0,
+        left: opts.position.indexOf('left') == -1 ? null : 0
+      }
+    }, opts || {});
 
     hijackDigest();
 
@@ -118,9 +122,13 @@
 
     // auto-load on startup
     if (opts.autoload) {
-      sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
-    } else {
-      sessionStorage.removeItem(autoloadKey);
+      if (opts.autoload === 'localStorage') {
+        localStorage.setItem(autoloadKey, JSON.stringify(opts));
+      } else if (opts.autoload === 'sessionStorage' || typeof opts.autoload === 'boolean') {
+        sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
+      } else {
+        throw new Error('Invalid value for autoload: ' + opts.autoload + ' can only be "localStorage" "sessionStorage" or boolean.')
+      }
     }
 
     // general variables

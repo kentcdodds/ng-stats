@@ -88,32 +88,32 @@
       if (opts === false) {
         return;
       }
-    } else {
-      opts.position = opts.position || 'top-left';
-      opts = angular.extend({
-        digestTimeThreshold: 16,
-        autoload: false,
-        trackDigest: false,
-        trackWatches: false,
-        logDigest: false,
-        logWatches: false,
-        styles: {
-          position: 'fixed',
-          background: 'black',
-          borderBottom: '1px solid #666',
-          borderRight: '1px solid #666',
-          color: 'red',
-          fontFamily: 'Courier',
-          width: 130,
-          zIndex: 9999,
-          textAlign: 'right',
-          top: opts.position.indexOf('top') == -1 ? null : 0,
-          bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
-          right: opts.position.indexOf('right') == -1 ? null : 0,
-          left: opts.position.indexOf('left') == -1 ? null : 0
-        }
-      }, opts || {});
     }
+
+    opts.position = opts.position || 'top-left';
+    opts = angular.extend({
+      digestTimeThreshold: 16,
+      autoload: false,
+      trackDigest: false,
+      trackWatches: false,
+      logDigest: false,
+      logWatches: false,
+      styles: {
+        position: 'fixed',
+        background: 'black',
+        borderBottom: '1px solid #666',
+        borderRight: '1px solid #666',
+        color: 'red',
+        fontFamily: 'Courier',
+        width: 130,
+        zIndex: 9999,
+        textAlign: 'right',
+        top: opts.position.indexOf('top') == -1 ? null : 0,
+        bottom: opts.position.indexOf('bottom') == -1 ? null : 0,
+        right: opts.position.indexOf('right') == -1 ? null : 0,
+        left: opts.position.indexOf('left') == -1 ? null : 0
+      }
+    }, opts || {});
 
     hijackDigest();
 
@@ -124,8 +124,10 @@
     if (opts.autoload) {
       if (opts.autoload === 'localStorage') {
         localStorage.setItem(autoloadKey, JSON.stringify(opts));
-      } else {
+      } else if (opts.autoload === 'sessionStorage' || typeof opts.autoload === 'boolean') {
         sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
+      } else {
+        throw new Error('Invalid value for autoload: ' + opts.autoload + ' can only be "localStorage" "sessionStorage" or boolean.')
       }
     }
 
