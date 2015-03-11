@@ -177,9 +177,10 @@ Hosted by <a href="http://github.com/kentcdodds/ng-stats">GitHub</a></div>
           };
 
           function initScopeWithPresets() {
-            var presets = JSON.parse(sessionStorage.getItem('showAngularStats_autoload'));
+            var sessionStoragePresets = JSON.parse(sessionStorage.getItem('showAngularStats_autoload'));
+            var presets = sessionStoragePresets;
             presets = presets || {};
-            presets.autoload = !!presets;
+            presets.autoload = !!sessionStoragePresets;
             presets = angular.extend({
               position: 'top-left',
               digestTimeThreshold: 16,
