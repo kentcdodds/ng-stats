@@ -91,11 +91,11 @@ Possible values: Any combination of `top`, `left`, `right`, `bottom`.
 
 The time (in milliseconds) where it goes from red to green.
 
-#### autoload (boolean) - default: false
+#### autoload (string or boolean) - default: false
 
-Uses sessionStorage to store whether the graphic should be automatically loaded every time the page is reloaded.
+Uses the [Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Storage) to store whether the graphic should be automatically loaded every time the page is reloaded.  Pass in `'localStorage'` for persistent loading or `'sessionStorage'` to load ng-stats for only the current tab.
 
-Note, if you pass `false` as options, it will simply remove the stats window: `showAngularStats(false)`
+Note, if you pass `false` as options, it will simply remove the stats window  and exit: `showAngularStats(false)`
 
 #### trackDigest (boolean) - default: false
 
