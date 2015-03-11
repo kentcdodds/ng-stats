@@ -52,7 +52,7 @@
   }
 
   // check for autoload
-  var autoloadOptions = sessionStorage[autoloadKey];
+  var autoloadOptions = sessionStorage[autoloadKey] || localStorage[autoloadKey];
   if (autoloadOptions) {
     autoload(JSON.parse(autoloadOptions));
   }
@@ -80,10 +80,14 @@
       current = null;
     }
 
-    // do nothing if the argument is false
-    if (opts === false) {
+    // Remove autoload if they did not specifically request it
+    if (opts === false || !opts.autoload) {
       sessionStorage.removeItem(autoloadKey);
-      return;
+      localStorage.removeItem(autoloadKey);
+      // do nothing if the argument is false
+      if (opts === false) {
+        return;
+      }
     } else {
       opts.position = opts.position || 'top-left';
       opts = angular.extend({
@@ -118,9 +122,11 @@
 
     // auto-load on startup
     if (opts.autoload) {
-      sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
-    } else {
-      sessionStorage.removeItem(autoloadKey);
+      if (opts.autoload === 'localStorage') {
+        localStorage.setItem(autoloadKey, JSON.stringify(opts));
+      } else {
+        sessionStorage.setItem(autoloadKey, JSON.stringify(opts));
+      }
     }
 
     // general variables
