@@ -27,6 +27,15 @@ graph shows a trend of the digest cycle average time.
 
 ## Installation
 
+### Bookmarklet
+
+Copy the code below and create a bookmarklet for ng-stats to use it on any angular website (so long as the debug info is
+enabled, if not, you'll need to run `angular.reloadWithDebugInfo()` first).
+
+```javascript
+javascript: (function() {var a = document.createElement("script");a.src = "https://rawgithub.com/kentcdodds/ng-stats/master/src/ng-stats.js";document.head.appendChild(a);setTimeout(function() {window.showAngularStats()}, 500);})();
+```
+
 If you just want the chart for development purposes, it's actually easiest to use as a
 [Chrome DevTools Snippet](https://developer.chrome.com/devtools/docs/authoring-development-workflow#snippets).
 Just copy/paste the `ng-stats.js` file into a snippet.
