@@ -69,7 +69,7 @@
   }
 
   function showAngularStats(opts) {
-    opts = opts || {};
+    opts = opts !== undefined ? opts : {};
     var returnData = {
       listeners: listeners
     };
