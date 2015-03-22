@@ -1,5 +1,7 @@
 # ng-stats
 
+[![Join the chat at https://gitter.im/kentcdodds/ng-stats](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kentcdodds/ng-stats?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Little utility to show stats about your page's angular digest/watches. This library currently has a simple script to
 produce a chart (see below). It also creates a module called `angularStats` which has a directive called `angular-stats`
 which can be used to put angular stats on a specific place on the page that you specify.
