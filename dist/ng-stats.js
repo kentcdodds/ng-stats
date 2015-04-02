@@ -7,14 +7,14 @@
   } else {
     root.showAngularStats = factory();
   }
-}(window, function() {
+}(window.self, function() {
   'use strict';
   var autoloadKey = 'showAngularStats_autoload';
   var current = null;
   // define the timer function to use based upon whether or not 'performance is available'
-  var timerNow = window.performance && window.performance.now
+  var timerNow = window.self.performance && window.self.performance.now
     ? function() {
-    return window.performance.now();
+    return window.self.performance.now();
   }
     : function() {
     return Date.now();
@@ -58,11 +58,11 @@
   }
 
   function autoload(options) {
-    if (window.angular && getRootScope()) {
+    if (window.self.angular && getRootScope()) {
       showAngularStats(options);
     } else {
       // wait for angular to load...
-      window.setTimeout(function() {
+      window.self.setTimeout(function() {
         autoload(options);
       }, 200);
     }
@@ -226,7 +226,7 @@
     //! Shift the canvas to the left.
     function shiftLeft() {
       if (state.active) {
-        window.setTimeout(shiftLeft, 250);
+        window.self.setTimeout(shiftLeft, 250);
         var ctx = cvs.getContext('2d');
         var imageData = ctx.getImageData(1, 0, graphSz.width - 1, graphSz.height);
         ctx.putImageData(imageData, 0, 0);
@@ -353,13 +353,13 @@
 
   // Uses timeouts to ensure that this is only run every 300ms (it's a perf bottleneck)
   function getWatcherCount() {
-    window.clearTimeout(watchCountTimeout);
+    window.self.clearTimeout(watchCountTimeout);
     var now = timerNow();
     if (now - lastWatchCountRun > 300) {
       lastWatchCountRun = now;
       lastWatchCount = getWatcherCountForScope();
     } else {
-      watchCountTimeout = window.setTimeout(function() {
+      watchCountTimeout = window.self.setTimeout(function() {
         updateData(getWatcherCount());
       }, 350);
     }

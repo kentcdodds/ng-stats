@@ -192,6 +192,12 @@ negatively impact your app's performance minimally. This is intended to be used 
 purposes so it shouldn't matter much anyway. It should be noted that calculating the watch count can be pretty
 expensive, so it's throttled to be calculated a minimum of 300ms.
 
+### Using in an iframe
+
+Thanks to [this brilliant PR](https://github.com/kentcdodds/ng-stats/pull/25) from
+[@jinyangzhen](https://github.com/jinyangzhen), you can run ng-stats in an iframe (like plunker!). See the PR for
+an example of how to accomplish this.
+
 ## License
 
 MIT

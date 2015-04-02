@@ -1,3 +1,7 @@
+# 2.2.0
+
+- Adding the ability to run this in an iframe [#25](/../../pull/25)
+
 # 2.1.4
 
 - Adding localStorage [#19](/../../pull/19)
