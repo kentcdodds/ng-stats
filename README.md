@@ -35,7 +35,7 @@ Copy the code below and create a bookmarklet for ng-stats to use it on any angul
 enabled, if not, you'll need to run `angular.reloadWithDebugInfo()` first).
 
 ```javascript
-javascript: (function() {var a = document.createElement("script");a.src = "https://rawgithub.com/kentcdodds/ng-stats/master/src/ng-stats.js";document.head.appendChild(a);setTimeout(function() {window.showAngularStats()}, 500);})();
+javascript: (function() {var a = document.createElement("script");a.src = "https://rawgithub.com/kentcdodds/ng-stats/master/src/ng-stats.js";a.onload=function(){window.showAngularStats()};document.head.appendChild(a)})();
 ```
 
 If you just want the chart for development purposes, it's actually easiest to use as a
