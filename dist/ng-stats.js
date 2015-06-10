@@ -92,7 +92,6 @@
 
     opts.position = opts.position || 'top-left';
     opts = angular.extend({
-      htmlId: null,
       digestTimeThreshold: 16,
       autoload: false,
       trackDigest: false,
@@ -137,8 +136,7 @@
     var noDigestSteps = 0;
 
     // add the DOM element
-    var htmlId = opts.statsId ? (' id="' + opts.htmlId + '"') : '';
-    state.$el = angular.element('<div' + htmlId + '><canvas></canvas><div></div></div>').css(opts.styles);
+    state.$el = angular.element('<div><canvas></canvas><div></div></div>').css(opts.styles);
     bodyEl.append(state.$el);
     var $text = state.$el.find('div');
 
