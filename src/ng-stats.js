@@ -51,8 +51,15 @@
     };
   }
 
+  //used to prevent localstorage error in chrome packaged apps
+  function isChromeApp() {
+    return (typeof chrome !== "undefined" &&
+            typeof chrome.storage !== "undefined" &&
+            typeof chrome.storage.local !== "undefined");
+  }
+
   // check for autoload
-  var autoloadOptions = sessionStorage[autoloadKey] || localStorage[autoloadKey];
+  var autoloadOptions = sessionStorage[autoloadKey] || (!isChromeApp() && localStorage[autoloadKey]);
   if (autoloadOptions) {
     autoload(JSON.parse(autoloadOptions));
   }
