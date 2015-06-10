@@ -118,6 +118,10 @@ based on the digestTimeThreshold.
 
 Setting this to true will cause ng-stats to log out the watch count to the console as it changes.
 
+#### htmlId (string) - default: null
+
+Sets an HTML ID attribute to the rendered stats element.
+
 ## Module
 
 Simply declare it as a dependency `angular.module('your-mod', ['angularStats']);`
