@@ -1,6 +1,6 @@
 {
   "name": "ng-stats",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Little utility to show stats about your page's angular digest/watches.",
   "main": "dist/ng-stats.js",
   "scripts": {

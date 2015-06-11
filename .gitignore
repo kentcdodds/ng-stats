@@ -2,3 +2,4 @@ node_modules
 src/lib
 .grunt
 dist/lib
+.idea
