@@ -51,8 +51,15 @@
     };
   }
 
+  //used to prevent localstorage error in chrome packaged apps
+  function isChromeApp() {
+    return (typeof chrome !== "undefined" &&
+            typeof chrome.storage !== "undefined" &&
+            typeof chrome.storage.local !== "undefined");
+  }
+
   // check for autoload
-  var autoloadOptions = sessionStorage[autoloadKey] || localStorage[autoloadKey];
+  var autoloadOptions = sessionStorage[autoloadKey] || (!isChromeApp() && localStorage[autoloadKey]);
   if (autoloadOptions) {
     autoload(JSON.parse(autoloadOptions));
   }
@@ -92,6 +99,7 @@
 
     opts.position = opts.position || 'top-left';
     opts = angular.extend({
+      htmlId: null,
       digestTimeThreshold: 16,
       autoload: false,
       trackDigest: false,
@@ -136,7 +144,8 @@
     var noDigestSteps = 0;
 
     // add the DOM element
-    state.$el = angular.element('<div><canvas></canvas><div></div></div>').css(opts.styles);
+    var htmlId = opts.htmlId ? (' id="' + opts.htmlId + '"') : '';
+    state.$el = angular.element('<div' + htmlId + '><canvas></canvas><div></div></div>').css(opts.styles);
     bodyEl.append(state.$el);
     var $text = state.$el.find('div');
 
