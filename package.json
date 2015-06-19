@@ -14,7 +14,7 @@
     "build": "npm run build:dist & npm run build:prod",
     "ci": "npm run code-checks && npm run test:single && npm run check-coverage && npm run build",
     "check-coverage": "./node_modules/istanbul/lib/cli.js check-coverage --statements 35 --functions 37 --lines 33 --branches 15",
-    "report-coverage": "echo 'not yet setup!'",
+    "report-coverage": "echo 'Reporting coverage stats' && cat ./coverage/lcov.info | codecov",
     "predeploy": "npm run deployClean && npm run deployCopy",
     "deploy": "surge -p deploy.ignored -d ng-stats.surge.sh",
     "deployCopy": "cp demo/index.html deploy.ignored/ && cp dist/ng-stats.js deploy.ignored/ && cp node_modules/angular/angular.js deploy.ignored/",
