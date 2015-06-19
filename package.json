@@ -61,7 +61,7 @@
     "babel-eslint": "3.1.17",
     "babel-loader": "5.1.4",
     "chai": "3.0.0",
-    "codecov.io": "0.1.2",
+    "codecov.io": "kentcdodds/codecov.io.git#feature/snap-ci-support",
     "eslint": "0.23.0",
     "eslint-loader": "0.14.0",
     "ghooks": "0.3.2",
