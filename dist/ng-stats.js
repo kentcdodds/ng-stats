@@ -1,4 +1,4 @@
-//! ng-stats version 2.3.0 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com) (ó ì_í)=óò=(ì_í ò)
+//! ng-stats version 2.3.1 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -336,69 +336,84 @@ return /******/ (function(modules) { // webpackBootstrap
 	      hijackDigest();
 	      var directiveIndex = index++;
 
-	      if (attrs.hasOwnProperty('digestLength')) {
-	        var digestEl = el;
-	        if (attrs.digestLength) {
-	          digestEl = angular.element(el[0].querySelector(attrs.digestLength));
+	      setupDigestLengthElement();
+	      setupWatchCountElement();
+	      addWatchCountListener();
+	      addDigestLengthListener();
+	      scope.$on('$destroy', destroyListeners);
+
+	      function setupDigestLengthElement() {
+	        if (attrs.hasOwnProperty('digestLength')) {
+	          var digestEl = el;
+	          if (attrs.digestLength) {
+	            digestEl = angular.element(el[0].querySelector(attrs.digestLength));
+	          }
+	          listeners.digestLength['ngStatsDirective' + directiveIndex] = function (length) {
+	            window.dirDigestNode = digestEl[0];
+	            digestEl.text((length || 0).toFixed(2));
+	          };
 	        }
-	        listeners.digestLength['ngStatsDirective' + directiveIndex] = function (length) {
-	          digestEl.text((length || 0).toFixed(2));
-	        };
 	      }
 
-	      if (attrs.hasOwnProperty('watchCount')) {
-	        var watchCountRoot;
-	        var watchCountEl = el;
-	        if (scope.watchCount) {
-	          watchCountEl = angular.element(el[0].querySelector(attrs.watchCount));
-	        }
+	      function setupWatchCountElement() {
+	        if (attrs.hasOwnProperty('watchCount')) {
+	          var watchCountRoot;
+	          var watchCountEl = el;
+	          if (scope.watchCount) {
+	            watchCountEl = angular.element(el[0].querySelector(attrs.watchCount));
+	          }
 
-	        if (scope.watchCountRoot) {
-	          if (scope.watchCountRoot === 'this') {
-	            watchCountRoot = el;
-	          } else {
-	            // In the case this directive is being compiled and it's not in the dom,
-	            // we're going to do the find from the root of what we have...
-	            var rootParent;
-	            if (attrs.hasOwnProperty('watchCountOfChild')) {
-	              rootParent = el[0];
+	          if (scope.watchCountRoot) {
+	            if (scope.watchCountRoot === 'this') {
+	              watchCountRoot = el;
 	            } else {
-	              rootParent = findRootOfElement(el);
-	            }
-	            watchCountRoot = angular.element(rootParent.querySelector(scope.watchCountRoot));
-	            if (!watchCountRoot.length) {
-	              throw new Error('no element at selector: ' + scope.watchCountRoot);
+	              // In the case this directive is being compiled and it's not in the dom,
+	              // we're going to do the find from the root of what we have...
+	              var rootParent;
+	              if (attrs.hasOwnProperty('watchCountOfChild')) {
+	                rootParent = el[0];
+	              } else {
+	                rootParent = findRootOfElement(el);
+	              }
+	              watchCountRoot = angular.element(rootParent.querySelector(scope.watchCountRoot));
+	              if (!watchCountRoot.length) {
+	                throw new Error('no element at selector: ' + scope.watchCountRoot);
+	              }
 	            }
 	          }
+
+	          listeners.watchCount['ngStatsDirective' + directiveIndex] = function (count) {
+	            var watchCount = count;
+	            if (watchCountRoot) {
+	              watchCount = getWatcherCountForElement(watchCountRoot);
+	            }
+	            watchCountEl.text(watchCount);
+	          };
 	        }
-
-	        listeners.watchCount['ngStatsDirective' + directiveIndex] = function (count) {
-	          var watchCount = count;
-	          if (watchCountRoot) {
-	            watchCount = getWatcherCountForElement(watchCountRoot);
-	          }
-	          watchCountEl.text(watchCount);
-	        };
 	      }
 
-	      if (scope.onWatchCountUpdate) {
-	        listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex] = function (count) {
-	          scope.onWatchCountUpdate({ watchCount: count });
-	        };
+	      function addWatchCountListener() {
+	        if (attrs.hasOwnProperty('onWatchCountUpdate')) {
+	          listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex] = function (count) {
+	            scope.onWatchCountUpdate({ watchCount: count });
+	          };
+	        }
 	      }
 
-	      if (scope.onDigestLengthUpdate) {
-	        listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex] = function (length) {
-	          scope.onDigestLengthUpdate({ digestLength: length });
-	        };
+	      function addDigestLengthListener() {
+	        if (attrs.hasOwnProperty('onDigestLengthUpdate')) {
+	          listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex] = function (length) {
+	            scope.onDigestLengthUpdate({ digestLength: length });
+	          };
+	        }
 	      }
 
-	      scope.$on('$destroy', function () {
+	      function destroyListeners() {
 	        delete listeners.digestLength['ngStatsDirectiveUpdate' + directiveIndex];
 	        delete listeners.watchCount['ngStatsDirectiveUpdate' + directiveIndex];
 	        delete listeners.digestLength['ngStatsDirective' + directiveIndex];
 	        delete listeners.watchCount['ngStatsDirective' + directiveIndex];
-	      });
+	      }
 	    }
 	  };
 
