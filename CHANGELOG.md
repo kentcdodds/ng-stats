@@ -1,3 +1,11 @@
+# 2.3.1
+
+- Using `kcd-common-tools` to build with ES6 and actually have some (brittle and odd) tests.
+
+# 2.3.0
+
+- Adding fix for Chrome extensions
+
 # 2.2.0
 
 - Adding the ability to run this in an iframe [#25](/../../pull/25)

@@ -1,5 +1,1 @@
-node_modules
-src/lib
-.grunt
-dist/lib
-.idea
+node_modules/kcd-common-tools/shared/link/gitignore

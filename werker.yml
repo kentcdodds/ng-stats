@@ -1,0 +1,9 @@
+box: node
+build:
+  steps:
+    - npm install
+    - npm test
+    - npm build
+deploy:
+  steps:
+    - npm deploy
