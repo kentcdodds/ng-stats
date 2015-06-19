@@ -39,18 +39,18 @@ Copy the code below and create a bookmarklet for ng-stats to use it on any angul
 enabled, if not, you'll need to run `angular.reloadWithDebugInfo()` first).
 
 ```javascript
-javascript: (function() {var a = document.createElement("script");a.src = "https://rawgithub.com/kentcdodds/ng-stats/master/src/ng-stats.js";a.onload=function(){window.showAngularStats()};document.head.appendChild(a)})();
+javascript: (function() {var a = document.createElement("script");a.src = "https://rawgithub.com/kentcdodds/ng-stats/master/dist/ng-stats.js";a.onload=function(){window.showAngularStats()};document.head.appendChild(a)})();
 ```
 
 If you just want the chart for development purposes, it's actually easiest to use as a
 [Chrome DevTools Snippet](https://developer.chrome.com/devtools/docs/authoring-development-workflow#snippets).
-Just copy/paste the `ng-stats.js` file into a snippet.
+Just copy/paste the `dist/ng-stats.js` file into a snippet.
 
 However, it uses UMD, so you can also include it in your app if you want via:
 
 `$ npm|bower install ng-stats`
 
-or download `ng-stats.js` and
+or download `dist/ng-stats.js` and
 
 `<script src="path-to/ng-stats.js"></script>`
 
