@@ -1,4 +1,10 @@
-# 2.3.1
+# 2.4.0
+
+- Adding different threshold and color for watch count. Thanks [@daniellmb](https://github.com/daniellmb)
+	[#41](/../../issues/41)
+- Adding warning color Thanks [@daniellmb](https://github.com/daniellmb) [#42](/../../issues/42)
+
+# 2.3.2
 
 - Making this work with isolate scope-only apps. Thanks [@daniellmb](https://github.com/daniellmb)
 	[#37](/../../issues/37)
