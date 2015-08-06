@@ -7,7 +7,8 @@
   ],
   "contributors": [
     "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
-    "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)"
+    "Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com)",
+    "Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com)"
   ],
   "description": "Little utility to show stats about your page's angular digest/watches.",
   "moduleType": [
