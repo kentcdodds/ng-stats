@@ -1,5 +1,10 @@
 # 2.3.1
 
+- Making this work with isolate scope-only apps. Thanks [@daniellmb](https://github.com/daniellmb)
+	[#37](/../../issues/37)
+
+# 2.3.1
+
 - Using `kcd-common-tools` to build with ES6 and actually have some (brittle and odd) tests.
 
 # 2.3.0

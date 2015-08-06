@@ -1,4 +1,4 @@
-//! ng-stats version 2.3.1 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com) (ó ì_í)=óò=(ì_í ò)
+//! ng-stats version 2.3.2 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -93,7 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var watchCountTimeout = null;
 	var lastWatchCount = getWatcherCount() || 0;
 	var lastDigestLength = 0;
-
+	var scopeSelectors = '.ng-scope, .ng-isolate-scope';
 	var $rootScope;
 
 	var digestIsHijacked = false;
@@ -432,7 +432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ($rootScope) {
 	    return $rootScope;
 	  }
-	  var scopeEl = document.querySelector('.ng-scope');
+	  var scopeEl = document.querySelector(scopeSelectors);
 	  if (!scopeEl) {
 	    return null;
 	  }
@@ -464,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  element = angular.element(element);
 	  var scope = element.scope();
 	  if (!scope) {
-	    element = angular.element(element.querySelector('.ng-scope'));
+	    element = angular.element(element.querySelector(scopeSelectors));
 	    scope = element.scope();
 	  }
 	  return scope;
