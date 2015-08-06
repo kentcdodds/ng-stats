@@ -74,7 +74,7 @@ function autoload(options) {
 }
 
 function showAngularStats(opts) {
-  /* eslint max-statements:[2, 43] */
+  /* eslint max-statements:[2, 45] */
   /* eslint complexity:[2, 18] */
   /* eslint consistent-return:0 */
   // TODO ^^ fix these things...
@@ -150,7 +150,8 @@ function showAngularStats(opts) {
 
   // add the DOM element
   var htmlId = opts.htmlId ? (' id="' + opts.htmlId + '"') : '';
-  state.$el = angular.element('<div' + htmlId + '><canvas></canvas><div><span></span> | <span></span></div></div>').css(opts.styles);
+  state.$el = angular.element('<div' + htmlId +
+      '><canvas></canvas><div><span></span> | <span></span></div></div>').css(opts.styles);
   bodyEl.append(state.$el);
   var $watchCount = state.$el.find('span');
   var $digestTime = $watchCount.next();
