@@ -103,6 +103,7 @@ function showAngularStats(opts) {
   opts = angular.extend({
     htmlId: null,
     digestTimeThreshold: 16,
+    watchCountThreshold: 2000,
     autoload: false,
     trackDigest: false,
     trackWatches: false,
@@ -113,7 +114,7 @@ function showAngularStats(opts) {
       background: 'black',
       borderBottom: '1px solid #666',
       borderRight: '1px solid #666',
-      color: 'red',
+      color: '#666',
       fontFamily: 'Courier',
       width: 130,
       zIndex: 9999,
@@ -149,9 +150,10 @@ function showAngularStats(opts) {
 
   // add the DOM element
   var htmlId = opts.htmlId ? (' id="' + opts.htmlId + '"') : '';
-  state.$el = angular.element('<div' + htmlId + '><canvas></canvas><div></div></div>').css(opts.styles);
+  state.$el = angular.element('<div' + htmlId + '><canvas></canvas><div><span></span> | <span></span></div></div>').css(opts.styles);
   bodyEl.append(state.$el);
-  var $text = state.$el.find('div');
+  var $watchCount = state.$el.find('span');
+  var $digestTime = $watchCount.next();
 
   // initialize the canvas
   var graphSz = {width: 130, height: 40};
@@ -204,20 +206,33 @@ function showAngularStats(opts) {
     }
   }
 
+  function getColor(metric, threshold) {
+    if (metric > threshold) {
+      return 'red';
+    } else if (metric > 0.7 * threshold) {
+      return 'orange';
+    }
+    return 'green';
+  }
+
   function colorLog(thingToLog, tracked) {
     var color;
     if (thingToLog === 'digest') {
-      color = tracked > opts.digestTimeThreshold ? 'color:red' : 'color:green';
+      color = 'color:' + getColor(tracked, opts.digestTimeThreshold);
+    } else if (thingToLog === 'watches') {
+      color = 'color:' + getColor(tracked, opts.watchCountThreshold);
     }
     return color;
   }
 
   function addDataToCanvas(watchCount, digestLength) {
     var averageDigest = digestLength || lastDigestLength;
-    var color = (averageDigest > opts.digestTimeThreshold) ? 'red' : 'green';
+    var digestColor = getColor(averageDigest, opts.digestTimeThreshold);
     lastWatchCount = nullOrUndef(watchCount) ? lastWatchCount : watchCount;
+    var watchColor = getColor(lastWatchCount, opts.watchCountThreshold);
     lastDigestLength = nullOrUndef(digestLength) ? lastDigestLength : digestLength;
-    $text.text(lastWatchCount + ' | ' + lastDigestLength.toFixed(2)).css({color: color});
+    $watchCount.text(lastWatchCount).css({color: watchColor});
+    $digestTime.text(lastDigestLength.toFixed(2)).css({color: digestColor});
 
     if (!digestLength) {
       return;
@@ -232,7 +247,7 @@ function showAngularStats(opts) {
     }
 
     // mark the point on the graph
-    ctx.fillStyle = color;
+    ctx.fillStyle = digestColor;
     ctx.fillRect(graphSz.width - 1, Math.max(0, graphSz.height - averageDigest), 2, 2);
   }
 
