@@ -23,7 +23,7 @@ var lastWatchCountRun = timerNow();
 var watchCountTimeout = null;
 var lastWatchCount = getWatcherCount() || 0;
 var lastDigestLength = 0;
-
+var scopeSelectors = '.ng-scope, .ng-isolate-scope';
 var $rootScope;
 
 var digestIsHijacked = false;
@@ -367,7 +367,7 @@ function getRootScope() {
   if ($rootScope) {
     return $rootScope;
   }
-  var scopeEl = document.querySelector('.ng-scope');
+  var scopeEl = document.querySelector(scopeSelectors);
   if (!scopeEl) {
     return null;
   }
@@ -399,7 +399,7 @@ function getClosestChildScope(element) {
   element = angular.element(element);
   var scope = element.scope();
   if (!scope) {
-    element = angular.element(element.querySelector('.ng-scope'));
+    element = angular.element(element.querySelector(scopeSelectors));
     scope = element.scope();
   }
   return scope;
