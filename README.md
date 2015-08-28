@@ -126,6 +126,10 @@ Setting this to true will cause ng-stats to log out the watch count to the conso
 
 Sets an HTML ID attribute to the rendered stats element.
 
+#### rootScope (object) - default: undefined
+
+Passes the $rootScope to ng-stats. This parameter is only required for Ionic support where the ng-scope and ng-isolate-scope classes are removed. The only way of using the ng-stats with Ionic is invoking `showAngularStats( { options } )` in your code and passing the `$rootScope` manually.
+
 ## Module
 
 Simply declare it as a dependency `angular.module('your-mod', ['angularStats']);`
