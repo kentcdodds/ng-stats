@@ -73,21 +73,7 @@ function autoload(options) {
   }
 }
 
-function showAngularStats(opts) {
-  /* eslint max-statements:[2, 45] */
-  /* eslint complexity:[2, 18] */
-  /* eslint consistent-return:0 */
-  // TODO ^^ fix these things...
-  opts = opts !== undefined ? opts : {};
-  var returnData = {
-    listeners: listeners
-  };
-  // delete the previous one
-  if (current) {
-    current.$el && current.$el.remove();
-    current.active = false;
-    current = null;
-  }
+function initOptions(opts) {
 
   // Remove autoload if they did not specifically request it
   if (opts === false || !opts.autoload) {
@@ -102,6 +88,7 @@ function showAngularStats(opts) {
   opts.position = opts.position || 'top-left';
   opts = angular.extend({
     htmlId: null,
+    rootScope: undefined,
     digestTimeThreshold: 16,
     watchCountThreshold: 2000,
     autoload: false,
@@ -125,6 +112,33 @@ function showAngularStats(opts) {
       left: opts.position.indexOf('left') === -1 ? null : 0
     }
   }, opts || {});
+
+  // for ionic support
+  if (opts.rootScope) {
+    $rootScope = opts.rootScope;
+  }
+
+  return opts;
+}
+
+function showAngularStats(opts) {
+  /* eslint max-statements:[2, 45] */
+  /* eslint complexity:[2, 18] */
+  /* eslint consistent-return:0 */
+  // TODO ^^ fix these things...
+  opts = opts !== undefined ? opts : {};
+  var returnData = {
+    listeners: listeners
+  };
+  // delete the previous one
+  if (current) {
+    current.$el && current.$el.remove();
+    current.active = false;
+    current = null;
+  }
+
+  // Implemented in separate function due to webpack's statement count limit
+  opts = initOptions(opts);
 
   hijackDigest();
 
