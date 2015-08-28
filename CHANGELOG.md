@@ -1,3 +1,7 @@
+# 2.5.0
+
+- Add ability to specify a `rootScope`. Thanks [@pvadam](https://github.com/pvadam)
+
 # 2.4.0
 
 - Adding different threshold and color for watch count. Thanks [@daniellmb](https://github.com/daniellmb)

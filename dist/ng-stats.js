@@ -1,4 +1,4 @@
-//! ng-stats version 2.4.0 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com), Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com) (ó ì_í)=óò=(ì_í ò)
+//! ng-stats version 2.5.0 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com), Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -141,21 +141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	function showAngularStats(opts) {
-	  /* eslint max-statements:[2, 45] */
-	  /* eslint complexity:[2, 18] */
-	  /* eslint consistent-return:0 */
-	  // TODO ^^ fix these things...
-	  opts = opts !== undefined ? opts : {};
-	  var returnData = {
-	    listeners: listeners
-	  };
-	  // delete the previous one
-	  if (current) {
-	    current.$el && current.$el.remove();
-	    current.active = false;
-	    current = null;
-	  }
+	function initOptions(opts) {
 
 	  // Remove autoload if they did not specifically request it
 	  if (opts === false || !opts.autoload) {
@@ -170,6 +156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  opts.position = opts.position || 'top-left';
 	  opts = angular.extend({
 	    htmlId: null,
+	    rootScope: undefined,
 	    digestTimeThreshold: 16,
 	    watchCountThreshold: 2000,
 	    autoload: false,
@@ -193,6 +180,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	      left: opts.position.indexOf('left') === -1 ? null : 0
 	    }
 	  }, opts || {});
+
+	  // for ionic support
+	  if (opts.rootScope) {
+	    $rootScope = opts.rootScope;
+	  }
+
+	  return opts;
+	}
+
+	function showAngularStats(opts) {
+	  /* eslint max-statements:[2, 45] */
+	  /* eslint complexity:[2, 18] */
+	  /* eslint consistent-return:0 */
+	  // TODO ^^ fix these things...
+	  opts = opts !== undefined ? opts : {};
+	  var returnData = {
+	    listeners: listeners
+	  };
+	  // delete the previous one
+	  if (current) {
+	    current.$el && current.$el.remove();
+	    current.active = false;
+	    current = null;
+	  }
+
+	  // Implemented in separate function due to webpack's statement count limit
+	  opts = initOptions(opts);
 
 	  hijackDigest();
 
