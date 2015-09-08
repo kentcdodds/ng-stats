@@ -86,6 +86,11 @@
     "webpack-dev-server": "1.9.0",
     "with-package": "0.2.0"
   },
+  "jspm": {
+    "peerDependencies": {
+      "angular": "*"
+    }
+   },
   "kcdCommon": {
     "webpack": {
       "output": {
