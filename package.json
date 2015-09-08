@@ -87,9 +87,9 @@
     "with-package": "0.2.0"
   },
   "jspm": {
-+    "peerDependencies": {
-+      "angular": "*"
-+    }
+    "peerDependencies": {
+      "angular": "*"
+    }
    },
   "kcdCommon": {
     "webpack": {
