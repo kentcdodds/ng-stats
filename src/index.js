@@ -140,6 +140,10 @@ function showAngularStats(opts) {
   // Implemented in separate function due to webpack's statement count limit
   opts = initOptions(opts);
 
+  if(!opts) {
+    return;
+  }
+
   hijackDigest();
 
   // setup the state
