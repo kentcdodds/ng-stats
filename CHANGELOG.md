@@ -1,3 +1,11 @@
+# 2.5.2
+
+- Fix issues when calling `showAngularStats(false)` initially.
+
+# 2.5.1
+
+- Fix jspm issues
+
 # 2.5.0
 
 - Add ability to specify a `rootScope`. Thanks [@pvadam](https://github.com/pvadam)

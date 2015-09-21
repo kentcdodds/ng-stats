@@ -1,4 +1,4 @@
-//! ng-stats version 2.5.1 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com), Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com) (ó ì_í)=óò=(ì_í ò)
+//! ng-stats version 2.5.2 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com), Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -207,6 +207,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // Implemented in separate function due to webpack's statement count limit
 	  opts = initOptions(opts);
+
+	  if (!opts) {
+	    return;
+	  }
 
 	  hijackDigest();
 
