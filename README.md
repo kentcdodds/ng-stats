@@ -18,7 +18,7 @@ Example Red (digests are taking a bit...):
 
 ![Example Red](http://cl.ly/image/2f3L1B3b1q2V/ng-stats-bad.png)
 
-[Interactive Demo](http://kent.doddsfamily.us/ng-stats)
+[Interactive Demo](http://kentcdodds.com/ng-stats/)
 
 The first number is the number of watchers on the page (including `{{variables}}`, `$scope.$watch`, etc.). The second
 number is how long (in milliseconds) it takes angular to go through each digest cycle on average (bigger is worse). The
@@ -39,7 +39,7 @@ Copy the code below and create a bookmarklet for ng-stats to use it on any angul
 enabled, if not, you'll need to run `angular.reloadWithDebugInfo()` first).
 
 ```javascript
-javascript: (function() {var a = document.createElement("script");a.src = "https://rawgithub.com/kentcdodds/ng-stats/master/dist/ng-stats.js";a.onload=function(){window.showAngularStats()};document.head.appendChild(a)})();
+javascript: (function() {var a = document.createElement("script");a.src = "https://rawgit.com/kentcdodds/ng-stats/master/dist/ng-stats.js";a.onload=function(){window.showAngularStats()};document.head.appendChild(a)})();
 ```
 
 If you just want the chart for development purposes, it's actually easiest to use as a
@@ -192,7 +192,7 @@ invoke another digest in this handler or you'll get an infinite loop of doom). T
 - Somehow find out which watches are taking the longest... Ideas on implementation are welcome...
 - See what could be done with the new scoped digest coming in Angular version 1.3.
 - Count the number of digests or provide some analytics for frequency?
-- Create a Chrome Extension for the chart or integrate with [batarang](https://github.com/angular/angularjs-batarang)?
+- Create a Chrome Extension for the chart or integrate with [batarang](https://github.com/angular/batarang)?
 - Other ideas?
 
 ## Other notes
