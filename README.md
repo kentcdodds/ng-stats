@@ -24,6 +24,10 @@ The first number is the number of watchers on the page (including `{{variables}}
 number is how long (in milliseconds) it takes angular to go through each digest cycle on average (bigger is worse). The
 graph shows a trend of the digest cycle average time.
 
+## Thanks
+
+[Viper Bailey](https://github.com/jinxidoru) for writing the initial version (and most of the graph stuff).
+
 ## Development
 
 1. `npm install`
@@ -213,7 +217,3 @@ an example of how to accomplish this.
 ## License
 
 MIT
-
-## Thanks
-
-[Viper Bailey](https://github.com/jinxidoru) for writing the initial version (and most of the graph stuff).
