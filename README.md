@@ -1,5 +1,7 @@
 # ng-stats
 
+![unmaintained](https://img.shields.io/badge/status-unmaintained-red.svg?style=flat-square)
+
 [![npm version](https://img.shields.io/npm/v/ng-stats.svg?style=flat-square)](https://www.npmjs.org/package/ng-stats)
 [![npm downloads](https://img.shields.io/npm/dm/ng-stats.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ng-stats&from=2015-01-01)
 [![Build Status](https://snap-ci.com/kentcdodds/ng-stats/branch/master/build_image)](https://snap-ci.com/kentcdodds/ng-stats/branch/master)
