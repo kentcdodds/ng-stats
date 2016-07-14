@@ -1,4 +1,4 @@
-//! ng-stats version 2.5.2 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com), Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com) (ó ì_í)=óò=(ì_í ò)
+//! ng-stats version 2.5.4 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us), Viper Bailey <jinxidoru@gmail.com> (http://jinxidoru.blogspot.com), Daniel Lamb <dlamb.open.source@gmail.com> (http://daniellmb.com) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -135,7 +135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    showAngularStats(options);
 	  } else {
 	    // wait for angular to load...
-	    window.self.setTimeout(function () {
+	    setTimeout(function () {
 	      autoload(options);
 	    }, 200);
 	  }
@@ -337,7 +337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Shift the canvas to the left.
 	  function shiftLeft() {
 	    if (state.active) {
-	      window.self.setTimeout(shiftLeft, 250);
+	      setTimeout(shiftLeft, 250);
 	      var ctx = cvs.getContext('2d');
 	      var imageData = ctx.getImageData(1, 0, graphSz.width - 1, graphSz.height);
 	      ctx.putImageData(imageData, 0, 0);
@@ -475,13 +475,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// Uses timeouts to ensure that this is only run every 300ms (it's a perf bottleneck)
 	function getWatcherCount() {
-	  window.self.clearTimeout(watchCountTimeout);
+	  clearTimeout(watchCountTimeout);
 	  var now = timerNow();
 	  if (now - lastWatchCountRun > 300) {
 	    lastWatchCountRun = now;
 	    lastWatchCount = getWatcherCountForScope();
 	  } else {
-	    watchCountTimeout = window.self.setTimeout(function () {
+	    watchCountTimeout = setTimeout(function () {
 	      updateData(getWatcherCount());
 	    }, 350);
 	  }
