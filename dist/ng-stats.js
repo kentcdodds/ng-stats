@@ -63,6 +63,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
+	var _setTimeout = window.self.setTimeout? window.self.setTimeout: setTimeout;
+	var _clearTimeout = window.self.clearTimeout? window.self.clearTimeout: clearTimeout;
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _angular = __webpack_require__(1);
@@ -135,7 +138,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    showAngularStats(options);
 	  } else {
 	    // wait for angular to load...
-	    window.self.setTimeout(function () {
+	    _setTimeout(function () {
 	      autoload(options);
 	    }, 200);
 	  }
@@ -337,7 +340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Shift the canvas to the left.
 	  function shiftLeft() {
 	    if (state.active) {
-	      window.self.setTimeout(shiftLeft, 250);
+	      _setTimeout(shiftLeft, 250);
 	      var ctx = cvs.getContext('2d');
 	      var imageData = ctx.getImageData(1, 0, graphSz.width - 1, graphSz.height);
 	      ctx.putImageData(imageData, 0, 0);
@@ -475,13 +478,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// Uses timeouts to ensure that this is only run every 300ms (it's a perf bottleneck)
 	function getWatcherCount() {
-	  window.self.clearTimeout(watchCountTimeout);
+	  _clearTimeout(watchCountTimeout);
 	  var now = timerNow();
 	  if (now - lastWatchCountRun > 300) {
 	    lastWatchCountRun = now;
 	    lastWatchCount = getWatcherCountForScope();
 	  } else {
-	    watchCountTimeout = window.self.setTimeout(function () {
+	    watchCountTimeout =_setTimeout(function () {
 	      updateData(getWatcherCount());
 	    }, 350);
 	  }
