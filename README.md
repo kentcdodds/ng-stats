@@ -20,7 +20,7 @@ Example Red (digests are taking a bit...):
 
 ![Example Red](http://cl.ly/image/2f3L1B3b1q2V/ng-stats-bad.png)
 
-[Interactive Demo](http://kentcdodds.com/ng-stats/)
+[Interactive Demo](https://kentcdodds.github.io/ng-stats/)
 
 The first number is the number of watchers on the page (including `{{variables}}`, `$scope.$watch`, etc.). The second
 number is how long (in milliseconds) it takes angular to go through each digest cycle on average (bigger is worse). The
