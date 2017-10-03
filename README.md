@@ -12,6 +12,10 @@ Little utility to show stats about your page's angular digest/watches. This libr
 produce a chart (see below). It also creates a module called `angularStats` which has a directive called `angular-stats`
 which can be used to put angular stats on a specific place on the page that you specify.
 
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/PKGFLnhDiFvsUA5P4kAXfiPs/kentcdodds/ng-stats'>
+  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/PKGFLnhDiFvsUA5P4kAXfiPs/kentcdodds/ng-stats.svg' />
+</a>
+
 Example Green (digests are running smoothly):
 
 ![Example Green](http://cl.ly/image/2H1X2Q222i0F/ng-stats-good.png)
