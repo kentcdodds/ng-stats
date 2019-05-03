@@ -4,8 +4,6 @@
 
 [![npm version](https://img.shields.io/npm/v/ng-stats.svg?style=flat-square)](https://www.npmjs.org/package/ng-stats)
 [![npm downloads](https://img.shields.io/npm/dm/ng-stats.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ng-stats&from=2015-01-01)
-[![Code Coverage](https://img.shields.io/codecov/c/github/kentcdodds/ng-stats.svg?style=flat-square)](https://codecov.io/github/kentcdodds/ng-stats)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kentcdodds/ng-stats?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Little utility to show stats about your page's angular digest/watches. This library currently has a simple script to
 produce a chart (see below). It also creates a module called `angularStats` which has a directive called `angular-stats`
