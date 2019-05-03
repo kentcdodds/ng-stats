@@ -4,17 +4,12 @@
 
 [![npm version](https://img.shields.io/npm/v/ng-stats.svg?style=flat-square)](https://www.npmjs.org/package/ng-stats)
 [![npm downloads](https://img.shields.io/npm/dm/ng-stats.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ng-stats&from=2015-01-01)
-[![Build Status](https://snap-ci.com/kentcdodds/ng-stats/branch/master/build_image)](https://snap-ci.com/kentcdodds/ng-stats/branch/master)
 [![Code Coverage](https://img.shields.io/codecov/c/github/kentcdodds/ng-stats.svg?style=flat-square)](https://codecov.io/github/kentcdodds/ng-stats)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kentcdodds/ng-stats?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Little utility to show stats about your page's angular digest/watches. This library currently has a simple script to
 produce a chart (see below). It also creates a module called `angularStats` which has a directive called `angular-stats`
 which can be used to put angular stats on a specific place on the page that you specify.
-
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/PKGFLnhDiFvsUA5P4kAXfiPs/kentcdodds/ng-stats'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/PKGFLnhDiFvsUA5P4kAXfiPs/kentcdodds/ng-stats.svg' />
-</a>
 
 Example Green (digests are running smoothly):
 
